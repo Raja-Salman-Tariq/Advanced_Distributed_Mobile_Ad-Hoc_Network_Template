@@ -1,23 +1,2 @@
 10:		Flooding started from node A
 11:		A creating pkt with seqNum 11
-17:		--- REDUNDANT PKT DROPPED BY H
-17:		--- REDUNDANT PKT DROPPED BY C
-17:		--- REDUNDANT PKT DROPPED BY H
-17:		--- REDUNDANT PKT DROPPED BY H
-18:		--- REDUNDANT PKT DROPPED BY E
-18:		--- REDUNDANT PKT DROPPED BY C
-18:		--- REDUNDANT PKT DROPPED BY B
-18:		--- REDUNDANT PKT DROPPED BY B
-19:		--- REDUNDANT PKT DROPPED BY C
-19:		--- REDUNDANT PKT DROPPED BY G
-19:		--- REDUNDANT PKT DROPPED BY I
-19:		--- REDUNDANT PKT DROPPED BY D
-19:		--- REDUNDANT PKT DROPPED BY D
-<--------------------------------------------->
-18:	===>> Destination Found !
-Source: 	A
-Dest: F
-Path: 		[A, B, D, E, ]
-<--------------------------------------------->
-19:		--- REDUNDANT PKT DROPPED BY F
-19:		--- REDUNDANT PKT DROPPED BY F

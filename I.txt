@@ -1,7 +1,1 @@
 10:		I going to sleep.
-15:		I waking up.
-15:		I flooding pkt to G
-15:		I flooding pkt to H
-16:		I going to sleep.
-19:		I waking up.
-19:		I going to sleep.

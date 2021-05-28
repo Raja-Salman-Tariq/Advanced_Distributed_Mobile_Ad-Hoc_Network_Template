@@ -31,7 +31,6 @@ public class Node extends Thread{
         }
     }
 
-
     void flood_new(){
         Packet p;
         if (mode==RING_SEARCH) {
@@ -77,7 +76,6 @@ public class Node extends Thread{
         nw.tick();
     }
 
-
     void flood(RingSearchPkt p){
 
         if (!shouldFlood(p)){
@@ -114,9 +112,9 @@ public class Node extends Thread{
             return;
         }
 
-        for (Node n:neighbors
+        for (Node n:myMPR
         ) {
-            if (n.id==p.src.id) {
+            if (n.id==p.src.id) { // todo CAUTION ! ! ! : might go circular;
                 continue;
             }
             int htl;
@@ -141,6 +139,9 @@ public class Node extends Thread{
     String sid;
     ArrayList<Node> neighbors;
     Set<Node> twoHopNeighbors;
+    Set<Node> myMPR;
+    Set<Node> myMPRSel;
+    Set<Node> myUncoveredTwoHopNeighbors;
     ArrayList<Packet> packets;
     ArrayBlockingQueue<Event> events;
     ArrayBlockingQueue<RingSearchPkt> eventPkts;
@@ -167,7 +168,14 @@ public class Node extends Thread{
         mode=_mode;
         if (mode==MPR) {
             twoHopNeighbors = new HashSet<>();
+            myMPR=new HashSet<>();
+            myMPRSel=new HashSet<>();
+            myUncoveredTwoHopNeighbors=new HashSet<>();
+
             setTwoHopNeighbours();
+            myUncoveredTwoHopNeighbors.addAll(twoHopNeighbors);
+            setMPR();
+
         }
     }
 
@@ -245,6 +253,12 @@ public class Node extends Thread{
     }
 
     boolean shouldFlood(Packet p) {
+        if (mode==MPR){ // TODO: this might cause unneccessary pkt drop, maybe re-look into this
+            int last=p.interims.size()-1; // TODO: but also note, we won't flood to non MPR, so is ok.
+            if (!myMPRSel.contains(p.interims.get(last)))
+                return false;
+        }
+
         for (Packet myP : packets
         ) {
             if (p.seqNo == myP.seqNo)
@@ -295,6 +309,9 @@ public class Node extends Thread{
         }
 
         twoHopNeighbors=null;
+        myMPR=null;
+        myMPRSel=null;
+        myUncoveredTwoHopNeighbors=null;
     }
 
     Event sleep_wake_quit(){
@@ -334,5 +351,91 @@ public class Node extends Thread{
         }
 
         System.out.println("================== 2 hoppie neghghvz: "+twoHopNeighbors);
+        System.out.println("\n\n=========================\n\n");
+    }
+
+    void setMPR(){
+
+        // ------------- STEP # 2 FROM PDF
+        for (Node n:twoHopNeighbors
+             ) {
+            if (n.neighbors.size()==1) { //if 2 hop node has only one node and that node...
+                Node tmp=n.neighbors.get(0);
+                if (hasNeighbourNode(tmp.id)) { /// ... is my neighbor, then add it
+                    myMPR.add(tmp);
+                    tmp.myMPRSel.add(this);
+                    for (Node node:tmp.neighbors
+                         ) {
+                        if (myUncoveredTwoHopNeighbors.contains(node)) // mark relevant nodes as covered
+                            myUncoveredTwoHopNeighbors.remove(node);
+                    }
+                }
+            }
+        }
+
+        // ------------- STEP # 3 FROM PDF
+        int idx=0;          // index to traverse neighbors
+        Node MPR_cdd;       // mpr candidate
+        int [] coverage = new int[neighbors.size()];
+        for (int i = 0; i < coverage.length; i++) {
+            coverage[i]=-1;
+        }
+
+        // find all neighbors' coverage
+        while (idx<neighbors.size()){
+            MPR_cdd=neighbors.get(idx);
+            if (!myMPR.contains(MPR_cdd)){
+                findCoverage(coverage, idx, MPR_cdd);
+            }
+            idx++;
+        }
+
+        // select best coverage and remove uncovered nodes from list, till all nodes are covered
+        while (myUncoveredTwoHopNeighbors.size()>0){
+            MPR_cdd=findHighestCoverageNode(coverage);
+            for (Node n2: MPR_cdd.neighbors
+                 ) {
+                myUncoveredTwoHopNeighbors.remove(n2);
+                System.out.println("Uncovered list size: "+myUncoveredTwoHopNeighbors.size());
+            }
+            myMPR.add(MPR_cdd);
+            MPR_cdd.myMPRSel.add(this);
+        }
+    }
+
+    Node findHighestCoverageNode(int [] coverage){
+        int max=-1;
+        int idx=-1;
+        for (int i = 0; i < neighbors.size(); i++) {
+            if (coverage[i]>max) {
+                max = coverage[i];
+                idx=i;
+            }
+        }
+        coverage[idx]=-1;
+        return neighbors.get(idx);
+    }
+
+    void findCoverage(int [] coverage, int idx, Node MPR_cdd){
+        int cvrg=-1;
+        for (Node n:myUncoveredTwoHopNeighbors
+             ) {
+            if (n.hasNeighbourNode(MPR_cdd.id))
+                cvrg++;
+        }
+        coverage[idx]=cvrg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return id == node.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

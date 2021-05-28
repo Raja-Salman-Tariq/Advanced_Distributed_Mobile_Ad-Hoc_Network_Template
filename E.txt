@@ -1,8 +1,1 @@
 9:		E going to sleep.
-17:		E waking up.
-17:		E flooding pkt to D
-17:		E flooding pkt to C
-17:		E flooding pkt to F
-18:		E going to sleep.
-18:		E waking up.
-18:		E going to sleep.

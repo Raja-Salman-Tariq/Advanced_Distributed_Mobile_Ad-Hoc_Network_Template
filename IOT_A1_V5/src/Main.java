@@ -8,7 +8,7 @@ public class Main {
         Network nw=new Network("MANET");
 //        nw.addNodes();//   1
 //        nw.topology1();//   2
-        nw.topology1(Node.RING_SEARCH);//  3
+        nw.topology1(Node.MPR);//  3
 //        choose_mode(nw);
         nw.startNodes();
         nw.floodNode("A");

@@ -1,12 +1,1 @@
-10:		H going to sleep.
-12:		H waking up.
-13:		H flooding pkt to C
-13:		H flooding pkt to B
-13:		H flooding pkt to I
-15:		H going to sleep.
-15:		H waking up.
-17:		H going to sleep.
-17:		H waking up.
-17:		H going to sleep.
-17:		H waking up.
-17:		H going to sleep.
+9:		H going to sleep.

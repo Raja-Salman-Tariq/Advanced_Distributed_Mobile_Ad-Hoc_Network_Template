@@ -1,5 +1,1 @@
 9:		F going to sleep.
-18:		F waking up.
-19:		F going to sleep.
-19:		F waking up.
-19:		F going to sleep.
