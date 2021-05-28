@@ -1,0 +1,8 @@
+9:		G going to sleep.
+18:		G waking up.
+18:		G flooding pkt to F
+18:		G flooding pkt to C
+18:		G flooding pkt to I
+19:		G going to sleep.
+19:		G waking up.
+19:		G going to sleep.

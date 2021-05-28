@@ -1,0 +1,10 @@
+9:		D going to sleep.
+13:		D waking up.
+13:		D flooding pkt to B
+13:		D flooding pkt to C
+13:		D flooding pkt to E
+15:		D going to sleep.
+18:		D waking up.
+19:		D going to sleep.
+19:		D waking up.
+19:		D going to sleep.
