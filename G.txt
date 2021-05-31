@@ -1,1 +1,29 @@
-9:		G going to sleep.
+10:		G going to sleep.
+18:		G waking up.
+18:		G MPR_Flooding to my MPRs: C, 
+18:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->H-->C-->G
+18:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->H-->C-->G
+19:		G going to sleep.
+19:		G waking up.
+20:		G MPR_Flooding to my MPRs: C, 
+21:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->D-->C-->G
+21:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->D-->C-->G
+22:		G going to sleep.
+22:		G waking up.
+22:		G MPR_Flooding to my MPRs: C, 
+22:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->H-->C-->G
+23:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->H-->C-->G
+24:		G going to sleep.
+24:		G waking up.
+25:		G MPR_Flooding to my MPRs: C, 
+25:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->D-->E-->C-->G
+25:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->D-->E-->C-->G
+26:		G going to sleep.

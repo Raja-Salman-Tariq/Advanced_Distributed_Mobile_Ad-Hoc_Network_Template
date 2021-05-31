@@ -1,2 +1,72 @@
 10:		Flooding started from node A
 11:		A creating pkt with seqNum 11
+11:		Recursing
+12:		Recursing
+13:		Recursing
+15:		Recursing
+15:		Recursing
+16:		Recursing
+16:		Recursing
+16:		--- REDUNDANT PKT DROPPED BY D
+17:		--- REDUNDANT PKT DROPPED BY I
+16:		--- REDUNDANT PKT DROPPED BY B
+17:		--- REDUNDANT PKT DROPPED BY I
+18:		Recursing
+18:		Recursing
+18:		Recursing
+18:		Recursing
+20:		Recursing
+21:		Recursing
+21:		Recursing
+22:		--- REDUNDANT PKT DROPPED BY D
+22:		--- REDUNDANT PKT DROPPED BY I
+22:		--- REDUNDANT PKT DROPPED BY I
+22:		--- REDUNDANT PKT DROPPED BY I
+23:		Recursing
+23:		Recursing
+23:		Recursing
+23:		--- REDUNDANT PKT DROPPED BY E
+24:		--- REDUNDANT PKT DROPPED BY E
+25:		--- REDUNDANT PKT DROPPED BY E
+25:		Recursing
+25:		Recursing
+25:		Recursing
+26:		Recursing
+26:		--- REDUNDANT PKT DROPPED BY I
+27:		--- REDUNDANT PKT DROPPED BY I
+27:		--- REDUNDANT PKT DROPPED BY I
+<--------------------------------------------->
+18:	===>> Destination Found !
+Source: 	A
+Dest: F
+Path: 		[A, A, H, C, G, ]
+<--------------------------------------------->
+27:		--- REDUNDANT PKT DROPPED BY F
+<--------------------------------------------->
+27:	===>> Destination Found !
+Source: 	A
+Dest: F
+Path: 		[A, A, B, D, C, G, ]
+<--------------------------------------------->
+27:		--- REDUNDANT PKT DROPPED BY F
+<--------------------------------------------->
+27:	===>> Destination Found !
+Source: 	A
+Dest: F
+Path: 		[A, A, B, D, E, ]
+<--------------------------------------------->
+27:		--- REDUNDANT PKT DROPPED BY F
+<--------------------------------------------->
+27:	===>> Destination Found !
+Source: 	A
+Dest: F
+Path: 		[A, A, B, H, C, G, ]
+<--------------------------------------------->
+27:		--- REDUNDANT PKT DROPPED BY F
+<--------------------------------------------->
+27:	===>> Destination Found !
+Source: 	A
+Dest: F
+Path: 		[A, A, B, D, E, C, G, ]
+<--------------------------------------------->
+27:		--- REDUNDANT PKT DROPPED BY F

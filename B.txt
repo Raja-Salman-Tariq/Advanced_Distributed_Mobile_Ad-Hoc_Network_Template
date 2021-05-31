@@ -1,1 +1,10 @@
 10:		B going to sleep.
+11:		B waking up.
+11:		B MPR_Flooding to my MPRs: D, H, 
+12:		B < < < MPR > > > flooding pkt to D Src:A, Last:B, Dst:6, Seq # = 11
+		Route:-->A-->A-->B
+12:		B < < < MPR > > > flooding pkt to H Src:A, Last:B, Dst:6, Seq # = 11
+		Route:-->A-->A-->B
+13:		B going to sleep.
+13:		B waking up.
+17:		B going to sleep.

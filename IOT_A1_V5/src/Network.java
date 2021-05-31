@@ -251,4 +251,21 @@ public class Network {
     void tick(){
         clock++;
     }
+
+    public void requestNeighborInfo(int id, int id1) {
+        Node n=findNodeWithID(id1);
+        Node dst=findNodeWithID(id);
+
+        RingSearchPkt p=new RingSearchPkt(-1, null, id, "",-1);
+
+        for (Node neighb:n.neighbors
+             ) {
+            p.addInterim(neighb);
+        }
+
+        dst.eventPkts.add(p);
+        dst.events.add(new Event(clock,Event.REQUEST_NEIGHBOR_INFO, "", numToStrID(id),true));
+//        logToFile("Sharing data: "+n.neighbors, myWriter);
+//        dst.neighborListRcvr.add(new ArrayList<Node>(n.neighbors));
+    }
 }

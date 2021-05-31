@@ -1,1 +1,14 @@
-9:		E going to sleep.
+10:		E going to sleep.
+21:		E waking up.
+21:		E MPR_Flooding to my MPRs: C, D, 
+22:		E < < < MPR > > > flooding pkt to C Src:A, Last:E, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->D-->E
+22:		E < < < MPR > > > flooding pkt to F Src:A, Last:E, Dst:6, Seq # = 11
+		Route:-->A-->A-->B-->D-->E
+23:		E going to sleep.
+23:		E waking up.
+23:		E going to sleep.
+23:		E waking up.
+24:		E going to sleep.
+25:		E waking up.
+25:		E going to sleep.

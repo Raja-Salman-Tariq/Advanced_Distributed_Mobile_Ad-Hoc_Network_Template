@@ -4,6 +4,8 @@ public class Event {
     final static int CODE_FLOODING=2;
     final static int TERMINATE=0;
 
+    final static int REQUEST_NEIGHBOR_INFO=3;
+
     int time;
     int code;
     String eventDesc;

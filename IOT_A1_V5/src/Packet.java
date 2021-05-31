@@ -33,4 +33,17 @@ public class Packet {
     void addInterim(Node n){
         interims.add(n);
     }
+    String routeInfo(){
+        String S1="Src:"+src.sid+
+                ", Last:"+interims.get(interims.size()-1).sid+
+                ", Dst:"+Integer.toString(dest)+", Seq # = "+seqNo+
+                "\n\t\tRoute:";
+        String S2="";
+
+        for (Node n:interims
+             ) {
+            S2+="-->"+n.sid;
+        }
+        return S1+S2;
+    }
 }
