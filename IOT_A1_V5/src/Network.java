@@ -1,8 +1,6 @@
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -174,6 +172,9 @@ public class Network {
         Node n= participants.get(1); // B
         n.addNeighbour("A", true);
 
+        n= participants.get(2); // C
+        n.addNeighbour("A", true);
+
         //Node n= participants[2]; // C
 
         n= participants.get(3); // D
@@ -199,6 +200,149 @@ public class Network {
         n= participants.get(8); // I
         n.addNeighbour("G", true);
         n.addNeighbour("H", true);
+    }
+
+    void topology2(int mode){
+        for (int i=0; i< 9; i++)
+            addNode(false, mode);
+
+        //Node n= participants[0]; // A
+
+        Node n= participants.get(1); // B
+        n.addNeighbour("A", true);
+
+        //Node n= participants[2]; // C
+
+        n= participants.get(3); // D
+        n.addNeighbour("B", true);
+        n.addNeighbour("D", true);
+
+        n= participants.get(4); // E
+        n.addNeighbour("D", true);
+        n.addNeighbour("B", true);
+
+        n= participants.get(5); // F
+        n.addNeighbour("E", true);
+
+        n= participants.get(6); // G
+        n.addNeighbour("D", true);
+        n.addNeighbour("A", true);
+
+        n= participants.get(7); // H
+        n.addNeighbour("A", true);
+        n.addNeighbour("E", true);
+        n.addNeighbour("F", true);
+
+        n= participants.get(8); // I
+        n.addNeighbour("G", true);
+        n.addNeighbour("H", true);
+    }
+
+    void topology3(int mode){
+        for (int i=0; i< 9; i++)
+            addNode(false, mode);
+
+        //Node n= participants[0]; // A
+
+        Node n= participants.get(1); // B
+        n.addNeighbour("A", true);
+
+        n= participants.get(2); // C
+        n.addNeighbour("B", true);
+
+        n= participants.get(3); // D
+        n.addNeighbour("D", true);
+        n.addNeighbour("B", true);
+
+        n= participants.get(4); // E
+        n.addNeighbour("E", true);
+        n.addNeighbour("F", true);
+
+        n= participants.get(5); // F
+        n.addNeighbour("E", true);
+
+        n= participants.get(6); // G
+        n.addNeighbour("G", true);
+        n.addNeighbour("H", true);
+
+        n= participants.get(7); // H
+        n.addNeighbour("A", true);
+        n.addNeighbour("D", true);
+        n.addNeighbour("B", true);
+
+        n= participants.get(8); // I
+        n.addNeighbour("C", true);
+        n.addNeighbour("H", true);
+    }
+
+    void topology4(int mode){
+        for (int i=0; i< 9; i++)
+            addNode(false, mode);
+
+        //Node n= participants[0]; // A
+
+        Node n= participants.get(1); // B
+        n.addNeighbour("A", true);
+
+        n= participants.get(2); // C
+        n.addNeighbour("C", true);
+
+
+        n= participants.get(3); // D
+        n.addNeighbour("B", true);
+        n.addNeighbour("A", true);
+
+        n= participants.get(4); // E
+        n.addNeighbour("D", true);
+        n.addNeighbour("E", true);
+
+        n= participants.get(5); // F
+        n.addNeighbour("E", true);
+
+        n= participants.get(6); // G
+        n.addNeighbour("F", true);
+        n.addNeighbour("A", true);
+
+        n= participants.get(7); // H
+        n.addNeighbour("A", true);
+        n.addNeighbour("H", true);
+        n.addNeighbour("B", true);
+
+        n= participants.get(8); // I
+        n.addNeighbour("A", true);
+        n.addNeighbour("B", true);
+    }
+
+    void randomTopology(int mode){
+        for (int i=0; i< 9; i++)
+            addNode(false, mode);
+
+        //initialize n
+        Node n = participants.get(1);
+
+        //create list of nodes names
+        List<String> nodes = new ArrayList<>();
+        nodes.add("A");
+        nodes.add("B");
+        nodes.add("C");
+        nodes.add("D");
+        nodes.add("E");
+        nodes.add("F");
+        nodes.add("G");
+
+        int countRandomNeighbors = 0;
+        Random rand = new Random();
+
+        for (int i = 1; i <= nodes.size(); i++) {
+            n= participants.get(i);
+
+            //generate random number of neighbours from 0-5
+            countRandomNeighbors = rand.nextInt(5);
+            Collections.shuffle(nodes);
+            for (int j = 1; j <= countRandomNeighbors; j++) {
+                n.addNeighbour(nodes.get(j), true);
+            }
+        }
     }
 
 //==============================================================

@@ -1,5 +1,3 @@
 9:		F going to sleep.
-15:		F waking up because received flooding request from E
-15:		F going to sleep.
-25:		F waking up because received termination request from nw
-25:		F shutting down...
+11:		F waking up because received termination request from nw
+11:		F shutting down...

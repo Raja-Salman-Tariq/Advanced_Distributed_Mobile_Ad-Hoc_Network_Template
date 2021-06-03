@@ -1,2 +1,3 @@
 9:		I going to sleep.
-24:		I waking up because received flooding request from H
+11:		I waking up because received termination request from nw
+11:		I shutting down...

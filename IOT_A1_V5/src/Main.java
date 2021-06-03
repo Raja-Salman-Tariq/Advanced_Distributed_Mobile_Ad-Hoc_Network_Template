@@ -1,7 +1,3 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
 public class Main {
@@ -20,10 +16,10 @@ public class Main {
     }
 
     static void choose_mode(Network nw){
-        System.out.println("Select a mode to emulate:\n0. Naive Approach;\t\t1.Ring Search;\t\t2.OLSR/MPR");
+        System.out.println("Select a mode to emulate:\n0. Naive Approach\t\t1.Ring Search\t\t2.OLSR/MPR");
         int mode=inp.nextInt();
 
-        System.out.println("Select a topology to emulate:\n0. Show topologies.\t\t1.Topology # 1\t\t2.Random Topology.");
+        System.out.println("Select a topology to emulate:\n0. Show topologies.\t\t1.Topology # 1\t\t2.Topology # 2\t\t3.Topology # 3\t\t4.Topology # 4\t\t5.Random Topology.");
         int topology=0;
 
         topology=inp.nextInt();
@@ -35,7 +31,10 @@ public class Main {
 
         switch (topology){
             case(1):    nw.topology1(mode);
-//            case(3):    nw.randomTopology();
+            case(2):    nw.topology2(mode);
+            case(3):    nw.topology3(mode);
+            case(4):    nw.topology4(mode);
+            case(5):    nw.randomTopology(mode);
         }
 
     }

@@ -1,4 +1,3 @@
 9:		G going to sleep.
-18:		G waking up because received flooding request from C
-18:		G going to sleep.
-24:		G waking up because received flooding request from C
+11:		G waking up because received termination request from nw
+11:		G shutting down...

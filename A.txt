@@ -1,8 +1,5 @@
 9:		A going to sleep.
-14:		A waking up because received flooding request from B
-15:		A going to sleep.
-20:		A waking up because received flooding request from B
-22:		< < -o-O-0 > > A ring search flooding pkt to B
-24:		< < -o-O-0 > > A ring search flooding pkt to H
-25:		A going to sleep.
-25:		A waking up because received flooding request from H
+10:		A waking up because received new flooding request from nw
+11:		A Flooding new packet for H
+11:		< < ~~~~~~~~ > > A flooding pkt to B
+11:		< < ~~~~~~~~ > > A flooding pkt to H
