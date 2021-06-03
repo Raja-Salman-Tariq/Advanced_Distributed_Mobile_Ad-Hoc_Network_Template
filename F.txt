@@ -1,5 +1,1 @@
 9:		F going to sleep.
-11:		F waking up because received flooding request from A
-11:		< < ~~~~~~~~ > > F flooding pkt to E
-13:		F going to sleep.
-13:		F waking up because received flooding request from E

@@ -1,3 +1,1 @@
 9:		I going to sleep.
-14:		I waking up because received termination request from nw
-14:		I shutting down...

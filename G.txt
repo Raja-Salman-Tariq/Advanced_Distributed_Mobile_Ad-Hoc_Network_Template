@@ -1,4 +1,1 @@
 9:		G going to sleep.
-11:		G waking up because received flooding request from B
-11:		< < ~~~~~~~~ > > G flooding pkt to B
-11:		< < ~~~~~~~~ > > G flooding pkt to D
