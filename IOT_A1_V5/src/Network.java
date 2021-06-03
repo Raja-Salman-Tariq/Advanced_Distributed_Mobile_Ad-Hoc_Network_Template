@@ -46,15 +46,15 @@ public class Network {
             System.out.println("]");
         }
         System.out.println("|================================|");
-        System.out.println("|Total Packets Generated:\t"+redPkts+"\t|");
-        System.out.println("|Total Redundant Packets:\t"+totalPkts+"\t|");
+        System.out.println("|Total Packets Generated:\t"+totalPkts+"\t|");
+        System.out.println("|Total Redundant Packets:\t"+redPkts+"\t|");
         System.out.println("|Redundancy:\t\t\t"+(redPkts/totalPkts)*100+"%\t\t  |");
         System.out.println("|Convergence ticks/time:\t"+clock+"   |");
         System.out.println("|================================|");
 
         logToFile("|================================|", myWriter);
-        logToFile("|Total Packets Generated:\t"+redPkts+"\t|", myWriter);
-        logToFile("|Total Redundant Packets:\t"+totalPkts+"\t|", myWriter);
+        logToFile("|Total Packets Generated:\t"+totalPkts+"\t|", myWriter);
+        logToFile("|Total Redundant Packets:\t"+redPkts+"\t|", myWriter);
         logToFile("|Redundancy:\t\t\t"+(redPkts/totalPkts)*100+"%\t\t  |", myWriter);
         logToFile("|Convergence ticks/time:\t"+clock+"   |", myWriter);
         logToFile("|================================|", myWriter);
@@ -66,6 +66,7 @@ public class Network {
             return;
         }
         resetNetwork();
+        startNodes(true);
     }
     void floodNode(){
 //        System.out.println("FLOODING D NORM");
@@ -120,7 +121,6 @@ public class Network {
 
         inp=new Scanner(System.in);
 
-        choose_mode();
 
         try {
             this.myWriter = new FileWriter("nw.txt");
@@ -128,6 +128,8 @@ public class Network {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        choose_mode();
 
         for (Node n:participants
         ) {
@@ -165,7 +167,7 @@ public class Network {
 
     void topology1(int mode){
         for (int i=0; i< 9; i++)
-            addNode(true, mode);
+            addNode(false, mode);
 
         //Node n= participants[0]; // A
 
@@ -270,6 +272,11 @@ public class Network {
             ioException.printStackTrace();
         }
 
+        try {
+            sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for (Node n:participants
              ) {
             n.events.add(new Event(clock, Event.TERMINATE, "", "nw", false));

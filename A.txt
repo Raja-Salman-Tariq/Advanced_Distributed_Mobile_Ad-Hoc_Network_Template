@@ -1,23 +1,8 @@
 9:		A going to sleep.
-10:		A waking up because received new flooding request from nw
-11:		A Flooding new packet for F
-11:		< < -o-O-0 > > A ring search flooding pkt to B
-11:		< < -o-O-0 > > A ring search flooding pkt to H
-13:		A going to sleep.
-13:		A waking up because received new flooding request from nw
-14:		A Flooding new packet for F
-14:		< < -o-O-0 > > A ring search flooding pkt to B
-14:		< < -o-O-0 > > A ring search flooding pkt to H
+14:		A waking up because received flooding request from B
 15:		A going to sleep.
-16:		A waking up because received new flooding request from nw
-17:		A Flooding new packet for F
-17:		< < -o-O-0 > > A ring search flooding pkt to B
-18:		< < -o-O-0 > > A ring search flooding pkt to H
-21:		A going to sleep.
-22:		A waking up because received new flooding request from nw
-24:		A Flooding new packet for F
-24:		< < -o-O-0 > > A ring search flooding pkt to B
+20:		A waking up because received flooding request from B
+22:		< < -o-O-0 > > A ring search flooding pkt to B
 24:		< < -o-O-0 > > A ring search flooding pkt to H
 25:		A going to sleep.
-30:		A waking up because received termination request from nw
-30:		A shutting down...
+25:		A waking up because received flooding request from H

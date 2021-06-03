@@ -1,9 +1,13 @@
 9:		E going to sleep.
-19:		E waking up because received flooding request from C
-22:		E going to sleep.
-28:		E waking up because received flooding request from D
-28:		E dropping redundant packet 		Src:A, Last:E, Dst:6, Curr:E, Seq # = 17
-		Route:-->B-->D-->E
+13:		E waking up because received flooding request from D
+13:		E going to sleep.
+14:		E waking up because received flooding request from D
+14:		< < -o-O-0 > > E ring search flooding pkt to C
+14:		< < -o-O-0 > > E ring search flooding pkt to F
+15:		E going to sleep.
+15:		E waking up because received flooding request from C
+16:		E dropping redundant packet 		Src:D, Last:E, Dst:9, Curr:E, Seq # = 14
+		Route:-->C-->E
 
-28:		E going to sleep.
-28:		E waking up because received flooding request from C
+16:		E going to sleep.
+25:		E waking up because received flooding request from C

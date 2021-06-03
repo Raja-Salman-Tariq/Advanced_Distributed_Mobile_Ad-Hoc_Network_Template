@@ -1,29 +1,23 @@
 9:		B going to sleep.
-11:		B waking up because received flooding request from A
+11:		B waking up because received flooding request from D
 11:		B going to sleep.
-14:		B waking up because received flooding request from A
-14:		< < -o-O-0 > > B ring search flooding pkt to D
-17:		< < -o-O-0 > > B ring search flooding pkt to H
-18:		B going to sleep.
-18:		B waking up because received flooding request from A
-19:		< < -o-O-0 > > B ring search flooding pkt to D
+14:		B waking up because received flooding request from D
+14:		< < -o-O-0 > > B ring search flooding pkt to A
+15:		< < -o-O-0 > > B ring search flooding pkt to H
+16:		B going to sleep.
+20:		B waking up because received flooding request from D
+20:		< < -o-O-0 > > B ring search flooding pkt to A
 22:		< < -o-O-0 > > B ring search flooding pkt to H
 23:		B going to sleep.
-23:		B waking up because received flooding request from H
-28:		B dropping redundant packet 		Src:A, Last:B, Dst:6, Curr:B, Seq # = 14
-		Route:-->H-->B
+23:		B waking up because received flooding request from A
+24:		B dropping redundant packet 		Src:D, Last:B, Dst:9, Curr:B, Seq # = 20
+		Route:-->B-->A-->B
 
-28:		B going to sleep.
-28:		B waking up because received flooding request from H
-28:		B dropping redundant packet 		Src:A, Last:B, Dst:6, Curr:B, Seq # = 17
-		Route:-->H-->B
+24:		B going to sleep.
+24:		B waking up because received flooding request from H
+24:		B dropping redundant packet 		Src:D, Last:B, Dst:9, Curr:B, Seq # = 20
+		Route:-->C-->H-->B
 
-28:		B going to sleep.
-28:		B waking up because received flooding request from D
-28:		B dropping redundant packet 		Src:A, Last:B, Dst:6, Curr:B, Seq # = 17
-		Route:-->B-->D-->B
-
-28:		B going to sleep.
-28:		B waking up because received flooding request from A
-28:		< < -o-O-0 > > B ring search flooding pkt to D
-28:		< < -o-O-0 > > B ring search flooding pkt to H
+24:		B going to sleep.
+25:		B waking up because received termination request from nw
+25:		B shutting down...

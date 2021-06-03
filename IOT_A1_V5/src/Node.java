@@ -392,6 +392,7 @@ public class Node extends Thread{
         if (p.dest==id) {
             synchronized (nw) {
                 nw.logDestFound(p);
+                nw.logToFile("I'm the destination !", myWriter);
             }
 //            nw.logToFile("dest if", myWriter);
 //            System.out.println("**************2");

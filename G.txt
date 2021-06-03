@@ -1,20 +1,4 @@
 9:		G going to sleep.
-19:		G waking up because received flooding request from C
-21:		G going to sleep.
-26:		G waking up because received flooding request from I
-28:		G dropping redundant packet 		Src:A, Last:G, Dst:6, Curr:G, Seq # = 17
-		Route:-->H-->I-->G
-
-28:		G going to sleep.
-28:		G waking up because received flooding request from C
-28:		< < -o-O-0 > > G ring search flooding pkt to F
-28:		< < -o-O-0 > > G ring search flooding pkt to C
-28:		< < -o-O-0 > > G ring search flooding pkt to I
-29:		G going to sleep.
-29:		G waking up because received flooding request from I
-29:		G dropping redundant packet 		Src:A, Last:G, Dst:6, Curr:G, Seq # = 24
-		Route:-->H-->I-->G
-
-29:		G going to sleep.
-30:		G waking up because received termination request from nw
-30:		G shutting down...
+18:		G waking up because received flooding request from C
+18:		G going to sleep.
+24:		G waking up because received flooding request from C

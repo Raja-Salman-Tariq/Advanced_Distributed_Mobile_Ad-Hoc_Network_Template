@@ -1,2 +1,5 @@
 9:		F going to sleep.
-28:		F waking up because received flooding request from G
+15:		F waking up because received flooding request from E
+15:		F going to sleep.
+25:		F waking up because received termination request from nw
+25:		F shutting down...

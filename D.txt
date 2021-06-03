@@ -1,15 +1,21 @@
 9:		D going to sleep.
-14:		D waking up because received flooding request from B
-15:		D going to sleep.
-19:		D waking up because received flooding request from B
-22:		< < -o-O-0 > > D ring search flooding pkt to B
-23:		< < -o-O-0 > > D ring search flooding pkt to C
-27:		< < -o-O-0 > > D ring search flooding pkt to E
-28:		D going to sleep.
-28:		D waking up because received flooding request from C
-28:		D dropping redundant packet 		Src:A, Last:D, Dst:6, Curr:D, Seq # = 17
-		Route:-->H-->C-->D
-
-28:		D going to sleep.
-28:		D waking up because received flooding request from C
-30:		< < -o-O-0 > > D ring search flooding pkt to B
+10:		D waking up because received new flooding request from nw
+11:		D Flooding new packet for I
+11:		< < -o-O-0 > > D ring search flooding pkt to B
+11:		< < -o-O-0 > > D ring search flooding pkt to C
+12:		< < -o-O-0 > > D ring search flooding pkt to E
+13:		D going to sleep.
+13:		D waking up because received new flooding request from nw
+14:		D Flooding new packet for I
+14:		< < -o-O-0 > > D ring search flooding pkt to B
+14:		< < -o-O-0 > > D ring search flooding pkt to C
+14:		< < -o-O-0 > > D ring search flooding pkt to E
+17:		D going to sleep.
+19:		D waking up because received new flooding request from nw
+20:		D Flooding new packet for I
+20:		< < -o-O-0 > > D ring search flooding pkt to B
+20:		< < -o-O-0 > > D ring search flooding pkt to C
+20:		< < -o-O-0 > > D ring search flooding pkt to E
+21:		D going to sleep.
+25:		D waking up because received termination request from nw
+25:		D shutting down...
