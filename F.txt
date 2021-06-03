@@ -1,1 +1,3 @@
 9:		F going to sleep.
+11:		F waking up because received termination request from nw
+11:		F shutting down...

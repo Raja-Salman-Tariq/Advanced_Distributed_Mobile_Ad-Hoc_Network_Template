@@ -176,8 +176,6 @@ public class Network {
         Node n= participants.get(1); // B
         n.addNeighbour("A", true);
 
-        n= participants.get(2); // C
-        n.addNeighbour("A", true);
 
         //Node n= participants[2]; // C
 

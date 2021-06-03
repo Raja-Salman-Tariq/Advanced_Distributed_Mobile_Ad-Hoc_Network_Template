@@ -8,3 +8,16 @@
 8:		Adding Node 8/H
 9:		Adding Node 9/I
 10:		Flooding started from node A
+11:		A creating pkt with seqNum 11
+<--------------------------------------------->
+11:	===>> Destination Found !
+Source: 	A
+Dest: H
+Path: 		[]
+<--------------------------------------------->
+11:		|================================|
+11:		|Total Packets Generated:	7	|
+11:		|Total Redundant Packets:	0	|
+11:		|Redundancy:			0%		  |
+11:		|Convergence ticks/time:	11   |
+11:		|================================|

@@ -1,1 +1,6 @@
 9:		G going to sleep.
+11:		G waking up because received flooding request from A
+11:		G MPR_Flooding to my MPRs: A, D, 
+11:		< < < MPR > > > G flooding pkt to D 		Src:A, Last:null, Dst:8, Curr:G, Seq # = 11
+		Route:
+

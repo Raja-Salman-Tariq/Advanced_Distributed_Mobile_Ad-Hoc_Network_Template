@@ -1,0 +1,28 @@
+11:		+++ Total Pkts: 1,		Red Pkts: 0,		RSP Pkts: 0 +++ 
+		Src:A, Last:null, Dst:8, Curr:A, Seq # = 11
+		Route:
+
+11:		+++ Total Pkts: 2,		Red Pkts: 0		RSP Pkts: 0 +++
+		Src:A, Last:null, Dst:8, Curr:A, Seq # = 11
+		Route:
+
+11:		+++ Total Pkts: 3,		Red Pkts: 0		RSP Pkts: 0 +++
+		Src:A, Last:null, Dst:8, Curr:A, Seq # = 11
+		Route:
+
+11:		+++ Total Pkts: 4,		Red Pkts: 0		RSP Pkts: 0 +++
+		Src:A, Last:null, Dst:8, Curr:A, Seq # = 11
+		Route:
+
+11:		+++ Total Pkts: 5,		Red Pkts: 0		RSP Pkts: 0 +++
+		Src:A, Last:null, Dst:8, Curr:B, Seq # = 11
+		Route:
+
+11:		+++ Total Pkts: 6,		Red Pkts: 0		RSP Pkts: 0 +++
+		Src:A, Last:null, Dst:8, Curr:G, Seq # = 11
+		Route:
+
+11:		+++ Total Pkts: 7,		Red Pkts: 0		RSP Pkts: 0 +++
+		Src:A, Last:null, Dst:8, Curr:B, Seq # = 11
+		Route:
+

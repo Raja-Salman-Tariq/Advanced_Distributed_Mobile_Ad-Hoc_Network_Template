@@ -1,2 +1,13 @@
 9:		A going to sleep.
 10:		A waking up because received new flooding request from nw
+11:		A Flooding new packet for H
+11:		A MPR_Flooding to my MPRs: B, H, 
+11:		< < < MPR > > > A flooding pkt to B 		Src:A, Last:null, Dst:8, Curr:A, Seq # = 11
+		Route:
+
+11:		< < < MPR > > > A flooding pkt to G 		Src:A, Last:null, Dst:8, Curr:A, Seq # = 11
+		Route:
+
+11:		< < < MPR > > > A flooding pkt to H 		Src:A, Last:null, Dst:8, Curr:A, Seq # = 11
+		Route:
+
