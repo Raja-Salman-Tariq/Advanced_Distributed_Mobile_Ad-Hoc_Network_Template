@@ -1,5 +1,9 @@
 9:		A going to sleep.
 10:		A waking up because received new flooding request from nw
 11:		A Flooding new packet for H
-11:		< < ~~~~~~~~ > > A flooding pkt to B
-11:		< < ~~~~~~~~ > > A flooding pkt to H
+11:		< < ~~~~~~~~ > > A flooding pkt to C
+11:		< < ~~~~~~~~ > > A flooding pkt to E
+11:		< < ~~~~~~~~ > > A flooding pkt to F
+13:		A going to sleep.
+14:		A waking up because received termination request from nw
+14:		A shutting down...

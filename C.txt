@@ -1,3 +1,4 @@
 9:		C going to sleep.
-11:		C waking up because received termination request from nw
-11:		C shutting down...
+11:		C waking up because received flooding request from A
+11:		< < ~~~~~~~~ > > C flooding pkt to B
+11:		< < ~~~~~~~~ > > C flooding pkt to E

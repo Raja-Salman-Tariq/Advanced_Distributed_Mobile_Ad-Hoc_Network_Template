@@ -1,3 +1,6 @@
 9:		B going to sleep.
-11:		B waking up because received flooding request from A
-11:		< < ~~~~~~~~ > > B flooding pkt to D
+11:		B waking up because received flooding request from C
+11:		< < ~~~~~~~~ > > B flooding pkt to E
+11:		< < ~~~~~~~~ > > B flooding pkt to G
+11:		< < ~~~~~~~~ > > B flooding pkt to C
+11:		< < ~~~~~~~~ > > B flooding pkt to H

@@ -1,3 +1,9 @@
 9:		E going to sleep.
-11:		E waking up because received termination request from nw
-11:		E shutting down...
+11:		E waking up because received flooding request from A
+11:		< < ~~~~~~~~ > > E flooding pkt to B
+11:		< < ~~~~~~~~ > > E flooding pkt to C
+11:		< < ~~~~~~~~ > > E flooding pkt to F
+11:		< < ~~~~~~~~ > > E flooding pkt to D
+13:		< < ~~~~~~~~ > > E flooding pkt to H
+14:		E going to sleep.
+14:		E waking up because received flooding request from B

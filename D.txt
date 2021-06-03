@@ -1,2 +1,2 @@
 9:		D going to sleep.
-11:		D waking up because received flooding request from B
+11:		D waking up because received flooding request from G
