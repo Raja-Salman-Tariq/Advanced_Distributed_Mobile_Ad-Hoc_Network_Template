@@ -1,29 +1,20 @@
-10:		G going to sleep.
-18:		G waking up.
-18:		G MPR_Flooding to my MPRs: C, 
-18:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->H-->C-->G
-18:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->H-->C-->G
-19:		G going to sleep.
-19:		G waking up.
-20:		G MPR_Flooding to my MPRs: C, 
-21:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->C-->G
-21:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->C-->G
-22:		G going to sleep.
-22:		G waking up.
-22:		G MPR_Flooding to my MPRs: C, 
-22:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->H-->C-->G
-23:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->H-->C-->G
-24:		G going to sleep.
-24:		G waking up.
-25:		G MPR_Flooding to my MPRs: C, 
-25:		G < < < MPR > > > flooding pkt to F Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->E-->C-->G
-25:		G < < < MPR > > > flooding pkt to I Src:A, Last:G, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->E-->C-->G
-26:		G going to sleep.
+9:		G going to sleep.
+19:		G waking up because received flooding request from C
+21:		G going to sleep.
+26:		G waking up because received flooding request from I
+28:		G dropping redundant packet 		Src:A, Last:G, Dst:6, Curr:G, Seq # = 17
+		Route:-->H-->I-->G
+
+28:		G going to sleep.
+28:		G waking up because received flooding request from C
+28:		< < -o-O-0 > > G ring search flooding pkt to F
+28:		< < -o-O-0 > > G ring search flooding pkt to C
+28:		< < -o-O-0 > > G ring search flooding pkt to I
+29:		G going to sleep.
+29:		G waking up because received flooding request from I
+29:		G dropping redundant packet 		Src:A, Last:G, Dst:6, Curr:G, Seq # = 24
+		Route:-->H-->I-->G
+
+29:		G going to sleep.
+30:		G waking up because received termination request from nw
+30:		G shutting down...

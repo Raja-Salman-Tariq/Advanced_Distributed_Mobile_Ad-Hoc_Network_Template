@@ -19,6 +19,7 @@ public class Packet {
         interims=new ArrayList<>();
     }
 
+
     Packet(Packet p, Node curr){
         ctr+=1;
         seqNo=p.seqNo;
@@ -27,16 +28,26 @@ public class Packet {
         data=p.data;
         interims=new ArrayList<>();
         interims.addAll(p.interims);
-        interims.add(curr);
+//        interims.add(curr);
     }
 
     void addInterim(Node n){
-        interims.add(n);
+        interims.add(n);//n.nw.logToFile("!!!!!!!!"+routeInfo(), n.nw.pktWriter);
     }
-    String routeInfo(){
-        String S1="Src:"+src.sid+
-                ", Last:"+interims.get(interims.size()-1).sid+
-                ", Dst:"+Integer.toString(dest)+", Seq # = "+seqNo+
+    String routeInfo(String curr_sid){
+        String myLast;
+
+        try{
+            myLast=interims.get(interims.size()-1).sid;
+        }catch (IndexOutOfBoundsException n){
+            myLast=null;
+        }
+
+        String S1="\t\tSrc:"+src.sid+
+                ", Last:"+myLast+
+                ", Dst:"+Integer.toString(dest)+
+                ", Curr:"+curr_sid+
+                ", Seq # = "+seqNo+
                 "\n\t\tRoute:";
         String S2="";
 
@@ -44,6 +55,8 @@ public class Packet {
              ) {
             S2+="-->"+n.sid;
         }
+        S2+="\n";
         return S1+S2;
     }
+
 }

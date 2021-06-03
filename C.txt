@@ -1,35 +1,18 @@
-10:		C going to sleep.
-13:		C waking up.
-13:		C MPR_Flooding to my MPRs: G, H, 
-13:		C < < < MPR > > > flooding pkt to D Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->H-->C
-14:		C < < < MPR > > > flooding pkt to E Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->H-->C
-15:		C < < < MPR > > > flooding pkt to G Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->H-->C
+9:		C going to sleep.
+14:		C waking up because received flooding request from H
 16:		C going to sleep.
-16:		C waking up.
-16:		C MPR_Flooding to my MPRs: G, H, 
-17:		C < < < MPR > > > flooding pkt to E Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->C
-17:		C < < < MPR > > > flooding pkt to G Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->C
-17:		C < < < MPR > > > flooding pkt to H Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->C
-18:		C going to sleep.
-18:		C waking up.
-18:		C MPR_Flooding to my MPRs: G, H, 
-18:		C < < < MPR > > > flooding pkt to D Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->H-->C
-18:		C < < < MPR > > > flooding pkt to E Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->H-->C
-20:		C < < < MPR > > > flooding pkt to G Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->H-->C
-21:		C going to sleep.
-22:		C waking up.
-22:		C MPR_Flooding to my MPRs: G, H, 
-23:		C < < < MPR > > > flooding pkt to G Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->E-->C
-24:		C < < < MPR > > > flooding pkt to H Src:A, Last:C, Dst:6, Seq # = 11
-		Route:-->A-->A-->B-->D-->E-->C
-25:		C going to sleep.
+19:		C waking up because received flooding request from H
+19:		< < -o-O-0 > > C ring search flooding pkt to D
+19:		< < -o-O-0 > > C ring search flooding pkt to E
+19:		< < -o-O-0 > > C ring search flooding pkt to G
+19:		< < -o-O-0 > > C ring search flooding pkt to H
+20:		C going to sleep.
+24:		C waking up because received flooding request from D
+27:		C dropping redundant packet 		Src:A, Last:C, Dst:6, Curr:C, Seq # = 17
+		Route:-->B-->D-->C
+
+27:		C going to sleep.
+28:		C waking up because received flooding request from H
+28:		< < -o-O-0 > > C ring search flooding pkt to D
+28:		< < -o-O-0 > > C ring search flooding pkt to E
+28:		< < -o-O-0 > > C ring search flooding pkt to G

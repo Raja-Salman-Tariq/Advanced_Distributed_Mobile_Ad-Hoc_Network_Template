@@ -3,7 +3,7 @@ public class Event {
     final static int CODE_FLOOD_NEW =1;
     final static int CODE_FLOODING=2;
     final static int TERMINATE=0;
-
+    static final int RESTART=4;
     final static int REQUEST_NEIGHBOR_INFO=3;
 
     int time;

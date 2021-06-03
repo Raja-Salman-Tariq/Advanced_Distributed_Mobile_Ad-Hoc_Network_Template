@@ -1,72 +1,85 @@
 10:		Flooding started from node A
 11:		A creating pkt with seqNum 11
-11:		Recursing
-12:		Recursing
-13:		Recursing
-15:		Recursing
-15:		Recursing
-16:		Recursing
-16:		Recursing
-16:		--- REDUNDANT PKT DROPPED BY D
-17:		--- REDUNDANT PKT DROPPED BY I
-16:		--- REDUNDANT PKT DROPPED BY B
-17:		--- REDUNDANT PKT DROPPED BY I
-18:		Recursing
-18:		Recursing
-18:		Recursing
-18:		Recursing
-20:		Recursing
-21:		Recursing
-21:		Recursing
-22:		--- REDUNDANT PKT DROPPED BY D
-22:		--- REDUNDANT PKT DROPPED BY I
-22:		--- REDUNDANT PKT DROPPED BY I
-22:		--- REDUNDANT PKT DROPPED BY I
-23:		Recursing
-23:		Recursing
-23:		Recursing
-23:		--- REDUNDANT PKT DROPPED BY E
-24:		--- REDUNDANT PKT DROPPED BY E
-25:		--- REDUNDANT PKT DROPPED BY E
-25:		Recursing
-25:		Recursing
-25:		Recursing
-26:		Recursing
-26:		--- REDUNDANT PKT DROPPED BY I
-27:		--- REDUNDANT PKT DROPPED BY I
-27:		--- REDUNDANT PKT DROPPED BY I
 <--------------------------------------------->
-18:	===>> Destination Found !
+11:	===>> Packet died !	Source: A	Dest: F	Path: 		[B, ]
+<--------------------------------------------->
+11:	===>> Packet died !	Source: A	Dest: F	Path: 		[H, ]
+11:		***********   HURRAAAAAHHH   **************
+12:		
+
+		< < =================== > >
+Restarting flooding with ring size 3
+
+
+14:		A creating pkt with seqNum 14
+<--------------------------------------------->
+14:	===>> Packet died !	Source: A	Dest: F	Path: 		[B, D, ]
+<--------------------------------------------->
+15:	===>> Packet died !	Source: A	Dest: F	Path: 		[H, C, ]
+15:		***********   HURRAAAAAHHH   **************
+16:		
+
+		< < =================== > >
+Restarting flooding with ring size 5
+
+
+17:		A creating pkt with seqNum 17
+<--------------------------------------------->
+18:	===>> Packet died !	Source: A	Dest: F	Path: 		[H, I, ]
+19:		--- REDUNDANT PKT DROPPED BY H
+<--------------------------------------------->
+19:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[B, H, ]
+<--------------------------------------------->
+21:	===>> Packet died !	Source: A	Dest: F	Path: 		[H, C, G, ]
+<--------------------------------------------->
+21:	===>> Packet died !	Source: A	Dest: F	Path: 		[H, C, E, ]
+21:		***********   HURRAAAAAHHH   **************
+22:		
+
+		< < =================== > >
+Restarting flooding with ring size 7
+
+
+24:		A creating pkt with seqNum 24
+27:		--- REDUNDANT PKT DROPPED BY C
+<--------------------------------------------->
+27:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[B, D, C, ]
+28:		--- REDUNDANT PKT DROPPED BY B
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[H, B, ]
+28:		--- REDUNDANT PKT DROPPED BY E
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[B, D, E, ]
+28:		--- REDUNDANT PKT DROPPED BY D
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[H, C, D, ]
+28:		--- REDUNDANT PKT DROPPED BY H
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[H, C, H, ]
+28:		--- REDUNDANT PKT DROPPED BY G
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[H, I, G, ]
+28:		--- REDUNDANT PKT DROPPED BY H
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[B, H, ]
+28:		--- REDUNDANT PKT DROPPED BY B
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[H, B, ]
+28:		--- REDUNDANT PKT DROPPED BY B
+<--------------------------------------------->
+28:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[B, D, B, ]
+29:		--- REDUNDANT PKT DROPPED BY G
+<--------------------------------------------->
+29:	===>> Packet died beacause it was dropped  !	Source: A	Dest: F	Path: 		[H, I, G, ]
+<--------------------------------------------->
+30:	===>> Destination Found !
 Source: 	A
 Dest: F
-Path: 		[A, A, H, C, G, ]
+Path: 		[H, C, G, F, ]
 <--------------------------------------------->
-27:		--- REDUNDANT PKT DROPPED BY F
-<--------------------------------------------->
-27:	===>> Destination Found !
-Source: 	A
-Dest: F
-Path: 		[A, A, B, D, C, G, ]
-<--------------------------------------------->
-27:		--- REDUNDANT PKT DROPPED BY F
-<--------------------------------------------->
-27:	===>> Destination Found !
-Source: 	A
-Dest: F
-Path: 		[A, A, B, D, E, ]
-<--------------------------------------------->
-27:		--- REDUNDANT PKT DROPPED BY F
-<--------------------------------------------->
-27:	===>> Destination Found !
-Source: 	A
-Dest: F
-Path: 		[A, A, B, H, C, G, ]
-<--------------------------------------------->
-27:		--- REDUNDANT PKT DROPPED BY F
-<--------------------------------------------->
-27:	===>> Destination Found !
-Source: 	A
-Dest: F
-Path: 		[A, A, B, D, E, C, G, ]
-<--------------------------------------------->
-27:		--- REDUNDANT PKT DROPPED BY F
+30:		|================================|
+30:		|Total Packets Generated:	10	|
+30:		|Total Redundant Packets:	23	|
+30:		|Redundancy:			0%		  |
+30:		|Convergence ticks/time:	30   |
+30:		|================================|

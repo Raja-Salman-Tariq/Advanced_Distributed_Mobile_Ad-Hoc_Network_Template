@@ -1,10 +1,29 @@
-10:		B going to sleep.
-11:		B waking up.
-11:		B MPR_Flooding to my MPRs: D, H, 
-12:		B < < < MPR > > > flooding pkt to D Src:A, Last:B, Dst:6, Seq # = 11
-		Route:-->A-->A-->B
-12:		B < < < MPR > > > flooding pkt to H Src:A, Last:B, Dst:6, Seq # = 11
-		Route:-->A-->A-->B
-13:		B going to sleep.
-13:		B waking up.
-17:		B going to sleep.
+9:		B going to sleep.
+11:		B waking up because received flooding request from A
+11:		B going to sleep.
+14:		B waking up because received flooding request from A
+14:		< < -o-O-0 > > B ring search flooding pkt to D
+17:		< < -o-O-0 > > B ring search flooding pkt to H
+18:		B going to sleep.
+18:		B waking up because received flooding request from A
+19:		< < -o-O-0 > > B ring search flooding pkt to D
+22:		< < -o-O-0 > > B ring search flooding pkt to H
+23:		B going to sleep.
+23:		B waking up because received flooding request from H
+28:		B dropping redundant packet 		Src:A, Last:B, Dst:6, Curr:B, Seq # = 14
+		Route:-->H-->B
+
+28:		B going to sleep.
+28:		B waking up because received flooding request from H
+28:		B dropping redundant packet 		Src:A, Last:B, Dst:6, Curr:B, Seq # = 17
+		Route:-->H-->B
+
+28:		B going to sleep.
+28:		B waking up because received flooding request from D
+28:		B dropping redundant packet 		Src:A, Last:B, Dst:6, Curr:B, Seq # = 17
+		Route:-->B-->D-->B
+
+28:		B going to sleep.
+28:		B waking up because received flooding request from A
+28:		< < -o-O-0 > > B ring search flooding pkt to D
+28:		< < -o-O-0 > > B ring search flooding pkt to H

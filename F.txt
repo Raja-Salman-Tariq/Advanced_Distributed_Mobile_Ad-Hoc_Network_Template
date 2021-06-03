@@ -1,11 +1,2 @@
-10:		F going to sleep.
-18:		F waking up.
-27:		F going to sleep.
-27:		F waking up.
-27:		F going to sleep.
-27:		F waking up.
-27:		F going to sleep.
-27:		F waking up.
-27:		F going to sleep.
-27:		F waking up.
-27:		F going to sleep.
+9:		F going to sleep.
+28:		F waking up because received flooding request from G

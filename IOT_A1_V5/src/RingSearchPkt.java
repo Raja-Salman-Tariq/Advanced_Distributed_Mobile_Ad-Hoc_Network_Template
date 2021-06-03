@@ -12,5 +12,6 @@ public class RingSearchPkt extends Packet{
     }
 
     void hop(){ if (htl>-1) htl--;}
-    boolean isAlive(){return htl>0 || htl==-1;}
+    boolean isAlive(){return interims.size()<htl || htl==-1;} // as there is src as interim
+
 }

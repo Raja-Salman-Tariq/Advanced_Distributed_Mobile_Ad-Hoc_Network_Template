@@ -11,7 +11,9 @@ public class Node extends Thread{
     void establishMPRState(){
         for (Node n:neighbors
              ) {
-            nw.requestNeighborInfo(id, n.id);
+            synchronized (nw) {
+                nw.requestNeighborInfo(id, n.id);
+            }
         }
 //        ArrayList<Event> backup;
 //        ArrayList<RingSearchPkt> pktBackup;
@@ -57,12 +59,13 @@ public class Node extends Thread{
     }
 
     public void run(){
+        state=STATE_ON;
 
         if (mode==MPR){
             establishMPRState();
         }
 
-        while(true) {
+        while(state) {
             Event e =sleep_wake_quit(); // will only pass if an event is present
             if (e==null) // of programme should quit, then return.
                 return;
@@ -81,6 +84,9 @@ public class Node extends Thread{
                 case (Event.TERMINATE):
                     //shutDownNode();
                     return;
+                case(Event.RESTART):
+                    packets.clear();
+                    break;
                 default:
                     continue;
             }
@@ -90,17 +96,34 @@ public class Node extends Thread{
     void flood_new(){
         RingSearchPkt p;
         if (mode==RING_SEARCH) {
-            System.out.println("Enter hope life for packet. Enter -1 to ignore hop life.");
-            p = new RingSearchPkt(nw.getSeqNo(sid), this, 0, "", inp.nextInt());
+            if (hope_life==0) {
+                System.out.println("Enter hope life for packet. Enter -1 to ignore hop life.");
+                hope_life=inp.nextInt();
+                nw.ringSizes.add(hope_life);
+            }
+            else
+                hope_life+=2;
+            int sno;
+            synchronized (nw){
+                sno=nw.getSeqNo(sid);
+            }
+            p = new RingSearchPkt(sno, this, 0, "", hope_life);
         }
         else {
-            p = new RingSearchPkt(nw.getSeqNo(sid), this, 0, "", -1);
-//        packets.add(p);
+            int sno;
+            synchronized (nw){
+                sno=nw.getSeqNo(sid);
+            }
+            p = new RingSearchPkt(sno, this, 0, "", -1);
         }
-        p.dest=getFloodingDestination().id;
+        p.dest=getFloodingDestination(packets.size());
+        packets.add(p);
 
-        nw.logToFile(sid+" Flooding new packet for "+nw.numToStrID(p.dest), myWriter);
-
+        synchronized (nw){
+            nw.logToFile(sid+" Flooding new packet for "+nw.numToStrID(p.dest), myWriter);
+            nw.totalPkts++;
+            nw.logToFile("+++ Total Pkts: "+nw.totalPkts+",\t\tRed Pkts: "+nw.redPkts+",\t\tRSP Pkts: "+nw.rsp+" +++ \n"+p.routeInfo(sid), nw.pktWriter);
+        }
         switch(mode) {
             case (MPR):
                 MPR_flood(new RingSearchPkt(p, this, -1));
@@ -115,10 +138,13 @@ public class Node extends Thread{
     }
 
     void flood(Packet p){   // floods via naive approach
-        nw.logToFile("Naive Flooding", nw.myWriter);
-        nw.logToFile("Naive Flooding", myWriter);
+//        nw.logToFile(sid+" starting Naive Flooding", nw.myWriter);
+//        nw.logToFile("Naive Flooding", myWriter);
         if (!shouldFlood(p)){
-            nw.redundantPkt(this);
+            synchronized (nw) {
+                nw.redundantPkt(this, p);
+                nw.logToFile(sid+" dropping redundant pkt "+p.routeInfo(sid), myWriter);
+            }
             return;
         }
 
@@ -131,26 +157,37 @@ public class Node extends Thread{
 //            nw.logToFile(sid+" about to read recvd pkt", myWriter);
             int htl=-1;
             RingSearchPkt newP=new RingSearchPkt(p, this, htl);
-            nw.logToFile(sid+ " flooding pkt to "+n.sid, myWriter);
-            Event e=new Event(nw.clock, Event.CODE_FLOODING, "", sid, true);
+            Event e;
+            synchronized (nw){
+                nw.logToFile("< < ~~~~~~~~ > > "+sid+ " flooding pkt to "+n.sid, myWriter);
+                nw.totalPkts++;
+                nw.logToFile("+++ Total Pkts: "+nw.totalPkts+", Red Pkts: "+nw.redPkts+" RSP Pkts: "+nw.rsp+" +++ \n"+p.routeInfo(sid), nw.pktWriter);
+                e=new Event(nw.clock, Event.CODE_FLOODING, "", sid, true);
+            }
             n.events.add(e);
             n.eventPkts.add(newP);
         }
-        nw.tick();
+        synchronized (nw) {
+            nw.tick();
+        }
     }
 
     void ring_flood(RingSearchPkt p){
-        nw.logToFile("Ring search Flooding", nw.myWriter);
-        nw.logToFile("Ring search Flooding", myWriter);
 
         if (!shouldFlood(p)){
-            nw.redundantPkt(this);
+            synchronized (nw) {
+                nw.logToFile(sid+" dropping redundant packet "+p.routeInfo(sid), myWriter);
+                nw.redundantPkt(this, p);
+                nw.logPktDied(p, true, this);
+            }
             return;
         }
 
         if (mode==RING_SEARCH){
             if (!p.isAlive()){
-                nw.logPktDied(p);
+                synchronized(nw) {
+                    nw.logPktDied(p, false, this);
+                }
                 return;
             }
         }
@@ -163,12 +200,22 @@ public class Node extends Thread{
             }
 //            nw.logToFile(sid+" about to read recvd pkt", myWriter);
             RingSearchPkt newP=new RingSearchPkt(p, this, p.htl-1);
-            nw.logToFile(sid+ " flooding pkt to "+n.sid, myWriter);
-            Event e=new Event(nw.clock, Event.CODE_FLOODING, "", sid, true);
+            newP.addInterim(n);
+            nw.notifyUnique(newP);
+            Event e;
+            synchronized (nw){
+                nw.logToFile("< < -o-O-0 > > "+sid+ " ring search flooding pkt to "+n.sid, myWriter);
+                nw.totalPkts++;
+                nw.rsp++;
+                nw.logToFile("+++ Total Pkts: "+nw.totalPkts+",\t\tRed Pkts: "+nw.redPkts+"\t\tRSP Pkts: "+nw.rsp+" +++\n"+p.routeInfo(n.sid), nw.pktWriter);
+                e=new Event(nw.clock, Event.CODE_FLOODING, "", sid, true);
+            }
             n.events.add(e);
             n.eventPkts.add(newP);
         }
-        nw.tick();
+        synchronized (nw) {
+            nw.tick();
+        }
     } // floods via ring search
 
     void MPR_flood(RingSearchPkt p){
@@ -181,25 +228,35 @@ public class Node extends Thread{
         }
 
         if (!shouldFlood(p)){
-            nw.redundantPkt(this);
+            synchronized (nw) {
+                nw.redundantPkt(this,p);
+            }
             return;
         }
 
-        nw.logToFile(sid+" MPR_Flooding to my MPRs: "+myMPRIds, myWriter);
-
+        synchronized (nw) {
+            nw.logToFile(sid + " MPR_Flooding to my MPRs: " + myMPRIds, myWriter);
+        }
         for (Node n:neighbors
         ) {
             if (n.id==p.src.id || p.interims.contains(n)) { // todo CAUTION ! ! ! : might go circular;
-                nw.logToFile("Recursing", nw.myWriter);
+//                nw.logToFile("Recursing", nw.myWriter);
                 continue;
             }
             RingSearchPkt newP=new RingSearchPkt(p, this, -1);
-            nw.logToFile(sid+ " < < < MPR > > > flooding pkt to "+n.sid+" "+newP.routeInfo(), myWriter);
-            Event e=new Event(nw.clock, Event.CODE_FLOODING, "", sid, true);
+            Event e;
+            synchronized (nw){
+                nw.logToFile("< < < MPR > > > "+sid+ " flooding pkt to "+n.sid+" "+newP.routeInfo(sid), myWriter);
+                nw.totalPkts++;
+                nw.logToFile("+++ Total Pkts: "+nw.totalPkts+",\t\tRed Pkts: "+nw.redPkts+"\t\tRSP Pkts: "+nw.rsp+" +++\n"+p.routeInfo(sid), nw.pktWriter);
+                e=new Event(nw.clock, Event.CODE_FLOODING, "", sid, true);
+            }
             n.events.add(e);
             n.eventPkts.add(newP);
         }
-        nw.tick();
+        synchronized (nw) {
+            nw.tick();
+        }
     }
 //==============================================================
 //<<-------------------   STRUCTURE FUNCS    ----------------->>
@@ -207,6 +264,8 @@ public class Node extends Thread{
     int id;
     int ctr;
     int mode;
+    int hope_life;
+    boolean state;
     String sid;
     ArrayList<Node> neighbors;
     Set<Node> twoHopNeighbors;
@@ -224,6 +283,9 @@ public class Node extends Thread{
     static final int RING_SEARCH=1;
     static final int REGULAR=0;
     static final int MPR=2;
+
+    static final boolean STATE_ON=true;
+    static final boolean STATE_OFF=false;
 
 
     public Node(int id, Network nw) {
@@ -252,8 +314,6 @@ public class Node extends Thread{
 
         }
     }
-
-
 
     void setNeighbours(Scanner inp){
         String usr_inp;
@@ -329,19 +389,26 @@ public class Node extends Thread{
     }
 
     boolean shouldFlood(Packet p) {
+        if (p.dest==id) {
+            synchronized (nw) {
+                nw.logDestFound(p);
+            }
+//            nw.logToFile("dest if", myWriter);
+//            System.out.println("**************2");
+            return false;
+        }
+
+        if (p.src==this && p.interims.size()==0) {
+            return true;
+        }
+
         for (Packet myP : packets
         ) {
             if (p.seqNo == myP.seqNo) {
 //                nw.logToFile("seq no if", myWriter);
+//                System.out.println("**************1");
                 return false;
             }
-        }
-
-
-        if (p.dest==id) {
-            nw.logDestFound(p);
-//            nw.logToFile("dest if", myWriter);
-            return false;
         }
 
         if (mode==MPR){ // TODO: this might cause unneccessary pkt drop, maybe re-look into this
@@ -349,33 +416,40 @@ public class Node extends Thread{
             if (last>=0) {
                 if (!myMPRSel.contains(p.interims.get(last))&&p.interims.size()>1) {
 //                    nw.logToFile("Lastest if + "+p.interims.get(0).sid, myWriter);
+//                    System.out.println("**********3");
                     return false;
                 }
             }
         }
 
+        packets.add(p);
         return true;
     }
 
-    Node getFloodingDestination(){
+    int getFloodingDestination(int ring_retry_check){
 //        return null;
-        System.out.println("Enter destination node, or enter 0 for random selection");
+        if (mode==RING_SEARCH && ring_retry_check>0){
+            return packets.get(0).dest;
+        }
+        System.out.println("Please enter destination node, or enter 0 for random selection");
         String uinp= inp.next();
 
         if (!uinp.equals("0")){
-            return nw.findNodeWithID(nw.strToNumID(uinp));
+            return nw.findNodeWithID(nw.strToNumID(uinp)).id;
         }
 
         Random rand=new Random();
         int rval=(rand.nextInt(nw.participants.size()));
-        return neighbors.get(rand.nextInt(neighbors.size())-1);
+        return neighbors.get(rand.nextInt(neighbors.size())-1).id;
     }
 
     void constructing(int id, Network nw){
 //        System.out.println("<<<<<<<<<<< "+nw.findNodeWithID());
         mode=0;
         ctr=1;
+        state=true;
         this.id = id;
+        hope_life=0;
         sid= nw.numToStrID(id);
         this.neighbors = new ArrayList<>();
         this.packets = new ArrayList<>();
@@ -406,17 +480,31 @@ public class Node extends Thread{
         } catch (InterruptedException interruptedException) {
             interruptedException.printStackTrace();
         }
-        nw.logToFile(sid + " waking up.", myWriter);
+        String eve="";
+        switch (e.code){
+            case(Event.REQUEST_NEIGHBOR_INFO): eve=" Neighbor Info Req"; break;
+            case(Event.CODE_FLOODING): eve=" flooding request"; break;
+            case(Event.CODE_FLOOD_NEW): eve= " new flooding request"; break;
+            case(Event.TERMINATE): eve=" termination request"; break;
+            case(Event.RESTART): eve=" restart request"; break;
+        }
+        nw.logToFile(sid + " waking up because received"+eve+" from "+e.src, myWriter);
 
-        if (quit()){
+        if (e.code==Event.TERMINATE) {
+            nw.logToFile(sid+" shutting down...", myWriter);
+            state=STATE_OFF;
             return null;
         }
+//        if (quit()){
+//            return null;
+//        }
         return e;
     }
 
     void naive_ring_olsr_selector(){
         try {
             RingSearchPkt myPkt=eventPkts.take();
+            nw.notifyUnique(myPkt);
             if (mode==RING_SEARCH)
                 ring_flood(myPkt);
             else if (mode==REGULAR)
@@ -458,44 +546,6 @@ public class Node extends Thread{
 //            nw.logToFile("*********keeping "+n.sid+"", myWriter);
         }
     }
-
-//    void setTwoHopNeighbours(){
-//        twoHopNeighbors=new HashSet<>();
-////        System.out.println("SETTING***************************req");
-//        nw.logToFile(sid+" My Neighbors: "+neighbors, nw.myWriter);
-//        int nodeid;
-//        for (Node n:neighbors
-//             ) {
-////            nodeid=n.id;
-////            nw.logToFile("Found iD ! :"+n.id, nw.myWriter);
-////            nw.logToFile("FOUND NEIGHBORS: "+nw.findNodeWithID(n.id).neighbors, nw.myWriter);
-////            ArrayList<Node> neighbors= null;
-//////            System.out.println("***************************req");
-////            System.out.println("<<<<<<<<<<<"+nw.findNodeWithID(n.id));
-////            nw.logToFile("Going to sleep, waiting for neighbor info.", myWriter);
-////            nw.logToFile("Node "+sid+" awaiting neighbor info", nw.myWriter);
-//////            try {
-//////                neighbors = neighborListRcvr.take();
-//////            } catch (InterruptedException e) {
-//////                e.printStackTrace();
-//////            }
-////////            System.out.println("***************************tek");
-//////            nw.logToFile("Woken up with neighbor info", myWriter);
-////            twoHopNeighbors.addAll(n.neighbors);
-//            nw.requestNeighborInfo(id,n.id);
-//            try {
-//                nw.logToFile("RECEIVED DATA !"+neighborListRcvr.take(), nw.myWriter);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//
-////        System.out.println("================== 2 hoppie neghghvz: "+twoHopNeighbors);
-////        System.out.println("\n\n=========================\n\n");
-//
-//
-//    }
 
     void setMPR(){
 
@@ -582,7 +632,7 @@ public class Node extends Thread{
                  ) {
 //                nw.logToFile("Removing node "+n2.sid+" cuz best coverage", myWriter);
                 myUncoveredTwoHopNeighbors.remove(n2);
-                System.out.println("Uncovered list size: "+myUncoveredTwoHopNeighbors.size());
+//                System.out.println("Uncovered list size: "+myUncoveredTwoHopNeighbors.size());
             }
             myMPR.add(MPR_cdd);
             try {
@@ -619,6 +669,10 @@ public class Node extends Thread{
                 cvrg++;
         }
         coverage[idx]=cvrg;
+    }
+
+    int getHope_life(){
+        return hope_life;
     }
 
     @Override
