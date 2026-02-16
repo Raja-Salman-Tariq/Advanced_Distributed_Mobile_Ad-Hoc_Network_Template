@@ -1,0 +1,135 @@
+version: 2
+
+sources:
+  - name: SENTINEL_INSURANCE
+    database: SENTINEL_INSURANCE
+    schema: BRONZE
+    description: Source system for insurance agency, agent, and hierarchy data
+    tables:
+      - name: AGENCY
+        description: Raw agency data containing identification, licensing, contact details, and operational status
+        columns:
+          - name: AGENCY_ID
+            description: Primary key - unique identifier for each agency
+            tests:
+              - not_null
+              - unique
+          - name: AGENCY_CODE
+            description: Unique alphanumeric business key for agency identification
+            tests:
+              - not_null
+              - unique
+          - name: AGENCY_NAME
+            description: Official registered name of the insurance agency
+            tests:
+              - not_null
+          - name: AGENCY_TYPE
+            description: Classification category of the agency based on operational model
+          - name: LICENSE_NUMBER
+            description: State-issued license number for regulatory compliance tracking
+            tests:
+              - not_null
+          - name: COMMISSION_RATE
+            description: Percentage rate used for agency commission calculations
+          - name: IS_ACTIVE
+            description: Current operational status flag
+          - name: ADDRESS
+            description: Complete physical street address of the agency location
+          - name: CITY
+            description: City name for geographical categorization and reporting
+          - name: STATE_CODE
+            description: Two-letter US state abbreviation for regional analysis
+          - name: ZIP_CODE
+            description: Postal code for location-based segmentation
+          - name: EMAIL
+            description: Primary contact email address for agency communications
+          - name: PHONE
+            description: Primary contact phone number
+          - name: APPOINTMENT_DATE
+            description: Date when agency appointment became effective
+          - name: CREATED_DATE
+            description: System timestamp for data audit and tracking purposes
+
+      - name: AGENCY_HIERARCHY
+        description: Raw hierarchical relationships between agencies with temporal effectiveness tracking
+        columns:
+          - name: HIERARCHY_ID
+            description: Primary key - unique identifier for each hierarchy relationship record
+            tests:
+              - not_null
+              - unique
+          - name: AGENCY_ID
+            description: Foreign key - identifies the child agency in the relationship
+            tests:
+              - not_null
+          - name: PARENT_AGENCY_ID
+            description: Foreign key - identifies the parent agency in the recursive relationship
+          - name: HIERARCHY_LEVEL
+            description: Numeric level in the organizational hierarchy
+            tests:
+              - not_null
+          - name: REGION
+            description: Geographic region assignment for the agency at this hierarchy level
+          - name: EFFECTIVE_DATE
+            description: Date when this hierarchical relationship became effective
+            tests:
+              - not_null
+          - name: CREATED_DATE
+            description: System timestamp for data audit and tracking purposes
+
+      - name: AGENT
+        description: Raw agent data containing personal information, licensing details, employment status, and agency association
+        columns:
+          - name: AGENT_ID
+            description: Unique numeric identifier for the agent
+            tests:
+              - not_null
+              - unique
+          - name: AGENT_CODE
+            description: Primary key - unique alphanumeric code for agent identification
+            tests:
+              - not_null
+              - unique
+          - name: FIRST_NAME
+            description: Agent's first name
+            tests:
+              - not_null
+          - name: LAST_NAME
+            description: Agent's last name
+            tests:
+              - not_null
+          - name: EMAIL
+            description: Unique email address for agent contact
+            tests:
+              - not_null
+              - unique:
+                  config:
+                    severity: warn
+          - name: PHONE
+            description: Unique phone number for agent contact
+            tests:
+              - unique
+          - name: LICENSE_NUMBER
+            description: Professional insurance license number
+            tests:
+              - not_null
+          - name: LICENSE_STATE
+            description: State jurisdiction where the license was issued
+          - name: LICENSE_EXPIRATION
+            description: License expiration date for compliance monitoring
+          - name: COMMISSION_SPLIT
+            description: Percentage split of commissions allocated to the agent
+          - name: IS_ACTIVE
+            description: Current employment status flag
+            tests:
+              - not_null
+          - name: HIRE_DATE
+            description: Date when the agent was hired
+          - name: TERMINATION_DATE
+            description: Date of employment termination (NULL if currently employed)
+          - name: AGENCY_ID
+            description: Foreign key reference - identifies the agent's affiliated agency
+            tests:
+              - not_null
+          - name: CREATED_DATE
+            description: System timestamp for data audit and tracking purposes

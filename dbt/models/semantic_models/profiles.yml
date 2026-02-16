@@ -1,0 +1,14 @@
+ekai_dbt:
+    outputs:
+        dev:
+            threads: 4
+            client_session_keep_alive: false
+            account: YMENAML-EKAIAZURESTAGING
+            warehouse: COMPUTE_WH
+            database: EKAI
+            schema: externalized_14
+            role: PUBLIC
+            user: SALMAN
+            password: ''
+            type: snowflake
+    target: dev

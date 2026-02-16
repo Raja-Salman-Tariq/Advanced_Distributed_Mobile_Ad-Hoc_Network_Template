@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select LICENSE_NUMBER
+from SENTINEL_INSURANCE.BRONZE.AGENCY
+where LICENSE_NUMBER is null
+
+

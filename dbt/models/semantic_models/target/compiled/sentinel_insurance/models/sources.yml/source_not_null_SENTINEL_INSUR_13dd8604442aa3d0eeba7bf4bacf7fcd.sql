@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select EFFECTIVE_DATE
+from SENTINEL_INSURANCE.BRONZE.AGENCY_HIERARCHY
+where EFFECTIVE_DATE is null
+
+

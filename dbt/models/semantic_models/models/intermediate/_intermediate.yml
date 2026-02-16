@@ -1,0 +1,147 @@
+version: 2
+
+models:
+  - name: int_agency_with_contact
+    description: Intermediate model enriching agency data with formatted contact information and location standardization
+    columns:
+      - name: agency_id
+        description: Primary key - unique identifier for each agency
+        tests:
+          - not_null
+          - unique
+      - name: agency_code
+        description: Unique alphanumeric business key for agency identification
+        tests:
+          - not_null
+      - name: agency_name
+        description: Official registered name of the insurance agency
+      - name: agency_type
+        description: Classification category of the agency based on operational model
+      - name: license_number
+        description: State-issued license number for regulatory compliance tracking
+      - name: commission_rate
+        description: Raw percentage rate used for agency commission calculations
+      - name: is_active
+        description: Current operational status flag
+      - name: address
+        description: Standardized physical street address (trimmed and uppercase)
+      - name: city
+        description: Standardized city name (trimmed and uppercase)
+      - name: state_code
+        description: Standardized two-letter US state abbreviation (uppercase)
+      - name: zip_code
+        description: Postal code for location-based segmentation
+      - name: email
+        description: Standardized contact email (lowercase and trimmed)
+      - name: phone
+        description: Cleaned phone number (digits only)
+      - name: city_state
+        description: Concatenated city and state for reporting convenience
+      - name: validated_commission_rate
+        description: Commission rate validated to be between 0 and 1, NULL if invalid
+      - name: appointment_date
+        description: Date when agency appointment became effective
+      - name: created_date
+        description: System timestamp for data audit and tracking
+      - name: has_valid_email
+        description: Boolean flag indicating if email matches standard email pattern
+      - name: has_valid_phone
+        description: Boolean flag indicating if phone number has exactly 10 digits
+
+  - name: int_agent_with_license
+    description: Intermediate model preparing agent data with employment status logic and license validity checks
+    columns:
+      - name: agent_id
+        description: Unique numeric identifier for the agent
+        tests:
+          - not_null
+          - unique
+      - name: agent_code
+        description: Primary key - unique alphanumeric code for agent identification
+        tests:
+          - not_null
+      - name: first_name
+        description: Agent's first name (trimmed)
+      - name: last_name
+        description: Agent's last name (trimmed)
+      - name: full_name
+        description: Concatenated first and last name for reporting
+      - name: email
+        description: Standardized email address (lowercase and trimmed)
+      - name: phone
+        description: Cleaned phone number (digits only)
+      - name: license_number
+        description: Professional insurance license number
+      - name: license_state
+        description: State jurisdiction where license was issued (uppercase)
+      - name: license_expiration
+        description: License expiration date for compliance monitoring
+      - name: license_status
+        description: Calculated status (VALID, EXPIRING_SOON, EXPIRED, UNKNOWN)
+      - name: days_until_expiration
+        description: Number of days until license expires (negative if expired)
+      - name: validated_commission_split
+        description: Commission split validated to be between 0 and 1, NULL if invalid
+      - name: is_active
+        description: Current employment status flag
+      - name: hire_date
+        description: Date when the agent was hired
+      - name: termination_date
+        description: Date of employment termination
+      - name: tenure_days
+        description: Number of days employed (current or total if terminated)
+      - name: has_invalid_dates
+        description: Boolean flag indicating if termination date is before hire date
+      - name: has_status_mismatch
+        description: Boolean flag indicating if agent is marked active but has termination date
+      - name: agency_id
+        description: Foreign key reference to affiliated agency
+      - name: created_date
+        description: System timestamp for data audit and tracking
+
+  - name: int_hierarchy_relationships
+    description: Intermediate model resolving parent-child agency relationships with effective date handling
+    columns:
+      - name: hierarchy_id
+        description: Primary key - unique identifier for each hierarchy relationship record
+        tests:
+          - not_null
+          - unique
+      - name: agency_id
+        description: Foreign key - identifies the child agency in the relationship
+        tests:
+          - not_null
+      - name: parent_agency_id
+        description: Foreign key - identifies the parent agency
+      - name: hierarchy_level
+        description: Numeric level in the organizational hierarchy
+      - name: region
+        description: Geographic region assignment for the agency
+      - name: effective_date
+        description: Date when this hierarchical relationship became effective
+      - name: created_date
+        description: System timestamp for data audit and tracking
+      - name: child_agency_code
+        description: Business code of the child agency
+      - name: child_agency_name
+        description: Name of the child agency
+      - name: child_agency_type
+        description: Type classification of the child agency
+      - name: child_is_active
+        description: Active status of the child agency
+      - name: parent_agency_code
+        description: Business code of the parent agency (NULL for top-level)
+      - name: parent_agency_name
+        description: Name of the parent agency (NULL for top-level)
+      - name: parent_agency_type
+        description: Type classification of the parent agency (NULL for top-level)
+      - name: parent_is_active
+        description: Active status of the parent agency (NULL for top-level)
+      - name: hierarchy_position
+        description: Calculated position (TOP_LEVEL or SUBORDINATE)
+      - name: is_self_referencing
+        description: Data quality flag for agencies that reference themselves as parent
+      - name: is_future_effective
+        description: Data quality flag for relationships effective in the future
+      - name: is_invalid_level
+        description: Data quality flag for hierarchy levels outside the 1-3 range

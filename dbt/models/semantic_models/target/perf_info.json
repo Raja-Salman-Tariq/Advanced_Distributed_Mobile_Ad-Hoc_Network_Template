@@ -1,0 +1,57 @@
+{
+    "path_count": 212,
+    "parsed_path_count": 212,
+    "static_analysis_path_count": 9,
+    "static_analysis_parsed_path_count": 9,
+    "is_partial_parse_enabled": true,
+    "is_static_analysis_enabled": true,
+    "read_files_elapsed": 0.029031863999989582,
+    "load_macros_elapsed": 1.6473472470006527,
+    "parse_project_elapsed": 1.3015793150007084,
+    "patch_sources_elapsed": 0.11441921299956448,
+    "process_manifest_elapsed": 0.058952133998900536,
+    "load_all_elapsed": 3.54318979099844,
+    "projects": [
+        {
+            "project_name": "sentinel_insurance",
+            "elapsed": 1.2814234029992804,
+            "parsers": [
+                {
+                    "parser": "model",
+                    "elapsed": 0.4257274810006493,
+                    "parsed_path_count": 9
+                },
+                {
+                    "parser": "test",
+                    "elapsed": 0.8468722979996528,
+                    "parsed_path_count": 4
+                }
+            ],
+            "parsed_path_count": 13
+        },
+        {
+            "project_name": "dbt_snowflake",
+            "elapsed": 0.006515674998809118,
+            "parsers": [],
+            "parsed_path_count": 0
+        },
+        {
+            "project_name": "dbt",
+            "elapsed": 0.0069723830001748865,
+            "parsers": [
+                {
+                    "parser": "doc",
+                    "elapsed": 0.00035124500027450267,
+                    "parsed_path_count": 1
+                }
+            ],
+            "parsed_path_count": 1
+        },
+        {
+            "project_name": "dbt_utils",
+            "elapsed": 0.0064246319998346735,
+            "parsers": [],
+            "parsed_path_count": 0
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select AGENCY_ID
+from SENTINEL_INSURANCE.BRONZE.AGENCY_HIERARCHY
+where AGENCY_ID is null
+
+

@@ -1,0 +1,46 @@
+{
+  "relationships": [
+    {
+      "name": "dim_agent_to_dim_agency",
+      "left_table": "dim_agent",
+      "right_table": "dim_agency",
+      "relationship_columns": [
+        {
+          "left_column": "agency_id",
+          "right_column": "agency_id"
+        }
+      ],
+      "join_type": "inner",
+      "relationship_type": "many_to_one",
+      "description": "Each agent belongs to one agency. This is the primary relationship between agents and their affiliated agencies."
+    },
+    {
+      "name": "bridge_agency_hierarchy_to_dim_agency_child",
+      "left_table": "bridge_agency_hierarchy",
+      "right_table": "dim_agency",
+      "relationship_columns": [
+        {
+          "left_column": "agency_id",
+          "right_column": "agency_id"
+        }
+      ],
+      "join_type": "inner",
+      "relationship_type": "many_to_one",
+      "description": "Each hierarchy record references a child agency in the organizational structure."
+    },
+    {
+      "name": "bridge_agency_hierarchy_to_dim_agency_parent",
+      "left_table": "bridge_agency_hierarchy",
+      "right_table": "dim_agency",
+      "relationship_columns": [
+        {
+          "left_column": "parent_agency_id",
+          "right_column": "agency_id"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each hierarchy record may reference a parent agency. Left outer join is used because top-level agencies may have null parent_agency_id."
+    }
+  ]
+}

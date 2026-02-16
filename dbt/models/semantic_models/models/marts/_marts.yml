@@ -1,0 +1,174 @@
+version: 2
+
+models:
+  - name: dim_agency
+    description: Dimension table containing comprehensive agency information including identification, licensing, contact details, and operational status
+    columns:
+      - name: agency_id
+        description: Primary key - unique identifier for each agency
+        tests:
+          - not_null
+          - unique
+      - name: agency_code
+        description: Unique alphanumeric business key for agency identification
+        tests:
+          - not_null
+          - unique
+      - name: agency_name
+        description: Official registered name of the insurance agency
+        tests:
+          - not_null
+      - name: agency_type
+        description: Classification category of the agency based on operational model
+      - name: license_number
+        description: State-issued license number for regulatory compliance tracking
+        tests:
+          - not_null
+      - name: commission_rate
+        description: Percentage rate used for agency commission calculations (semi-additive measure)
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+              inclusive: true
+      - name: is_active
+        description: Current operational status flag (TRUE=active, FALSE=inactive)
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+      - name: address
+        description: Complete physical street address of the agency location
+      - name: city
+        description: City name for geographical categorization and reporting
+      - name: state_code
+        description: Two-letter US state abbreviation for regional analysis
+      - name: zip_code
+        description: Postal code for location-based segmentation
+      - name: email
+        description: Primary contact email address for agency communications
+      - name: phone
+        description: Primary contact phone number
+      - name: appointment_date
+        description: Date when agency appointment became effective
+      - name: created_date
+        description: System timestamp for data audit and tracking purposes
+
+  - name: dim_agent
+    description: Dimension table for insurance agents containing personal information, licensing details, employment status, and agency association
+    columns:
+      - name: agent_id
+        description: Unique numeric identifier for the agent
+        tests:
+          - not_null
+          - unique
+      - name: agent_code
+        description: Primary key - unique alphanumeric code for agent identification
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        description: Agent's first name
+        tests:
+          - not_null
+      - name: last_name
+        description: Agent's last name
+        tests:
+          - not_null
+      - name: email
+        description: Unique email address for agent contact
+        tests:
+          - not_null
+          - unique
+      - name: phone
+        description: Unique phone number for agent contact
+        tests:
+          - unique
+      - name: license_number
+        description: Professional insurance license number
+        tests:
+          - not_null
+      - name: license_state
+        description: State jurisdiction where the license was issued
+      - name: license_expiration
+        description: License expiration date for compliance monitoring
+      - name: commission_split
+        description: Percentage split of commissions allocated to the agent (semi-additive measure)
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+              inclusive: true
+      - name: is_active
+        description: Current employment status flag (TRUE=active, FALSE=inactive/terminated)
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+      - name: hire_date
+        description: Date when the agent was hired
+      - name: termination_date
+        description: Date of employment termination (NULL if currently employed)
+      - name: agency_id
+        description: Foreign key reference to dim_agency - identifies the agent's affiliated agency
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_agency')
+              field: agency_id
+      - name: agency_name
+        description: Denormalized agency name for reporting convenience
+      - name: created_date
+        description: System timestamp for data audit and tracking purposes
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "termination_date IS NULL OR termination_date > hire_date"
+          config:
+            severity: error
+
+  - name: bridge_agency_hierarchy
+    description: Bridge table managing many-to-many hierarchical relationships between agencies with temporal effectiveness tracking
+    columns:
+      - name: hierarchy_id
+        description: Primary key - unique identifier for each hierarchy relationship record
+        tests:
+          - not_null
+          - unique
+      - name: agency_id
+        description: Foreign key to dim_agency - identifies the child agency in the relationship
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_agency')
+              field: agency_id
+      - name: parent_agency_id
+        description: Foreign key to dim_agency - identifies the parent agency in the recursive relationship
+        tests:
+          - relationships:
+              to: ref('dim_agency')
+              field: agency_id
+      - name: hierarchy_level
+        description: Numeric level in the organizational hierarchy (typically 1-3)
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 3
+              inclusive: true
+      - name: region
+        description: Geographic region assignment for the agency at this hierarchy level
+      - name: effective_date
+        description: Date when this hierarchical relationship became effective (required for temporal analysis)
+        tests:
+          - not_null
+      - name: created_date
+        description: System timestamp for data audit and tracking purposes
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "agency_id != parent_agency_id OR parent_agency_id IS NULL"
+          config:
+            severity: error
+      - dbt_utils.expression_is_true:
+          expression: "effective_date <= CURRENT_DATE"
+          config:
+            severity: warn

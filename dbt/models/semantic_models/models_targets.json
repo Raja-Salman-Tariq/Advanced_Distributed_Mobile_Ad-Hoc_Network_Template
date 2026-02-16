@@ -1,0 +1,20 @@
+[
+  {
+    "name": "dim_agency",
+    "database": "EKAI",
+    "schema": "externalized_14_marts",
+    "full_path": "EKAI.externalized_14_marts.dim_agency"
+  },
+  {
+    "name": "dim_agent",
+    "database": "EKAI",
+    "schema": "externalized_14_marts",
+    "full_path": "EKAI.externalized_14_marts.dim_agent"
+  },
+  {
+    "name": "bridge_agency_hierarchy",
+    "database": "EKAI",
+    "schema": "externalized_14_marts",
+    "full_path": "EKAI.externalized_14_marts.bridge_agency_hierarchy"
+  }
+]
