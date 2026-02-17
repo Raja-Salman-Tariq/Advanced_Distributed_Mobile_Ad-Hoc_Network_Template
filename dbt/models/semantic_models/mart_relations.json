@@ -1,0 +1,155 @@
+{
+  "relationships": [
+    {
+      "name": "fct_policy_premiums_to_dim_policies",
+      "left_table": "fct_policy_premiums",
+      "right_table": "dim_policies",
+      "relationship_columns": [
+        {
+          "left_column": "POLICY_ID",
+          "right_column": "POLICY_ID"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each premium transaction belongs to one policy. A policy can have multiple premium transactions."
+    },
+    {
+      "name": "fct_claims_to_dim_policies",
+      "left_table": "fct_claims",
+      "right_table": "dim_policies",
+      "relationship_columns": [
+        {
+          "left_column": "POLICY_ID",
+          "right_column": "POLICY_ID"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each claim is associated with one policy. A policy can have multiple claims."
+    },
+    {
+      "name": "fct_claim_payments_to_fct_claims",
+      "left_table": "fct_claim_payments",
+      "right_table": "fct_claims",
+      "relationship_columns": [
+        {
+          "left_column": "CLAIM_ID",
+          "right_column": "CLAIM_ID"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each payment transaction belongs to one claim. A claim can have multiple payment transactions."
+    },
+    {
+      "name": "dim_policies_to_dim_agents",
+      "left_table": "dim_policies",
+      "right_table": "dim_agents",
+      "relationship_columns": [
+        {
+          "left_column": "AGENT_ID",
+          "right_column": "AGENT_ID"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each policy is sold/serviced by one agent. An agent can handle multiple policies."
+    },
+    {
+      "name": "dim_agents_to_dim_agencies",
+      "left_table": "dim_agents",
+      "right_table": "dim_agencies",
+      "relationship_columns": [
+        {
+          "left_column": "AGENCY_ID",
+          "right_column": "AGENCY_ID"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each agent is affiliated with one agency. An agency can have multiple agents."
+    },
+    {
+      "name": "fct_claims_to_dim_line_of_business",
+      "left_table": "fct_claims",
+      "right_table": "dim_line_of_business",
+      "relationship_columns": [
+        {
+          "left_column": "LOB_CODE",
+          "right_column": "LOB_CODE"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each claim is categorized under one line of business. A line of business can have multiple claims."
+    },
+    {
+      "name": "dim_policies_to_dim_line_of_business",
+      "left_table": "dim_policies",
+      "right_table": "dim_line_of_business",
+      "relationship_columns": [
+        {
+          "left_column": "LOB_CODE",
+          "right_column": "LOB_CODE"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each policy belongs to one line of business. A line of business can have multiple policies."
+    },
+    {
+      "name": "dim_policies_to_dim_states",
+      "left_table": "dim_policies",
+      "right_table": "dim_states",
+      "relationship_columns": [
+        {
+          "left_column": "STATE_CODE",
+          "right_column": "STATE_CODE"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each policy is issued in one state. A state can have multiple policies."
+    },
+    {
+      "name": "dim_agencies_to_dim_states",
+      "left_table": "dim_agencies",
+      "right_table": "dim_states",
+      "relationship_columns": [
+        {
+          "left_column": "STATE_CODE",
+          "right_column": "STATE_CODE"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each agency is located in one state. A state can have multiple agencies."
+    },
+    {
+      "name": "fct_claims_to_dim_cause_of_loss",
+      "left_table": "fct_claims",
+      "right_table": "dim_cause_of_loss",
+      "relationship_columns": [
+        {
+          "left_column": "CAUSE_CODE",
+          "right_column": "CAUSE_CODE"
+        }
+      ],
+      "join_type": "left_outer",
+      "relationship_type": "many_to_one",
+      "description": "Each claim has one cause of loss. A cause can be associated with multiple claims."
+    }
+  ],
+  "metadata": {
+    "generated_date": "2026-02-17",
+    "total_relationships": 10,
+    "description": "Mart-level relationships for Sentinel Insurance data model. This file documents joins between fact and dimension tables in the marts layer only.",
+    "schema_type": "star_schema",
+    "notes": [
+      "All relationships use LEFT OUTER JOIN to preserve all records from the left table",
+      "Many-to-one relationships indicate that multiple records on the left can reference one record on the right",
+      "LOB_CODE and STATE_CODE are business keys used for dimensional lookups"
+    ]
+  }
+}

@@ -1,0 +1,475 @@
+version: 2
+sources:
+-   name: SENTINEL_INSURANCE
+    database: SENTINEL_INSURANCE
+    schema: BRONZE
+    description: client db
+    tables:
+    -   name: AGENCY
+        description: Stores details about insurance agencies that sell and manage
+            policies, including their contact information, licensing details, and
+            commission rates.
+        columns:
+        -   name: AGENCY_NAME
+            description: Legal business name of the agency.
+        -   name: AGENCY_ID
+            description: Unique numerical identifier for the agency. Primary key candidate.
+        -   name: ADDRESS
+            description: Street address of the agency location.
+        -   name: ZIP_CODE
+            description: Postal code for the agency's location.
+        -   name: AGENCY_TYPE
+            description: Categorization of the agency (e.g., Independent, Captive,
+                Broker).
+        -   name: IS_ACTIVE
+            description: Boolean flag indicating if the agency is currently active
+                and authorized to sell policies.
+        -   name: LICENSE_NUMBER
+            description: Official state-issued insurance license number for regulatory
+                compliance.
+        -   name: COMMISSION_RATE
+            description: The percentage rate used to calculate commissions for policies
+                sold by this agency.
+        -   name: APPOINTMENT_DATE
+            description: The date the agency was officially appointed to represent
+                the insurer.
+        -   name: CITY
+            description: City where the agency is located.
+        -   name: PHONE
+            description: Primary telephone number for the agency.
+        -   name: CREATED_DATE
+            description: Timestamp indicating when the agency record was created in
+                the system.
+        -   name: STATE_CODE
+            description: Two-letter state abbreviation for the agency's location.
+        -   name: EMAIL
+            description: Primary email contact for the agency.
+        -   name: AGENCY_CODE
+            description: Business-facing alphanumeric code used to identify the agency
+                in operations.
+    -   name: AGENT
+        description: Stores details of individual insurance producers authorized to
+            sell and manage policies, including licensing, contact information, and
+            agency affiliation.
+        columns:
+        -   name: PHONE
+            description: Contact telephone number for the agent.
+        -   name: IS_ACTIVE
+            description: Boolean flag indicating whether the agent is currently authorized
+                to conduct business.
+        -   name: LICENSE_EXPIRATION
+            description: The calendar date on which the agent's professional license
+                is set to expire.
+        -   name: HIRE_DATE
+            description: The date the agent was employed or contracted by the agency.
+        -   name: FIRST_NAME
+            description: The given name of the agent.
+        -   name: LICENSE_STATE
+            description: The state jurisdiction where the agent holds their license
+                to sell insurance.
+        -   name: CREATED_DATE
+            description: The system timestamp recording when this agent record was
+                first created.
+        -   name: EMAIL
+            description: Professional email address used for agent correspondence.
+        -   name: AGENCY_ID
+            description: Foreign key referencing the parent Agency entity this agent
+                is affiliated with.
+        -   name: LICENSE_NUMBER
+            description: Unique alphanumeric identifier assigned by the regulatory
+                body for the agent's license.
+        -   name: COMMISSION_SPLIT
+            description: Decimal value representing the agent's portion of the commission
+                revenue (e.g., 0.6 for 60%).
+        -   name: AGENT_ID
+            description: Unique numeric identifier for the agent record, serving as
+                the primary key.
+        -   name: AGENT_CODE
+            description: Unique business-facing code used to identify the agent in
+                operational systems.
+        -   name: LAST_NAME
+            description: The surname of the agent.
+        -   name: TERMINATION_DATE
+            description: The date the agent's employment or contract ended; null for
+                active agents.
+    -   name: CLAIM
+        description: Stores details of insurance claims filed against policies, tracking
+            the lifecycle of a loss event from reporting to closure.
+        columns:
+        -   name: CLAIM_NUMBER
+            description: Business-facing unique identifier for the claim, typically
+                used in correspondence.
+        -   name: TOTAL_PAID
+            description: Cumulative amount paid out for this claim to date.
+        -   name: CAUSE_CODE
+            description: Standardized code categorizing the cause of loss (e.g., Fire,
+                Collision). Likely references REF_CAUSE_OF_LOSS.
+        -   name: FRAUD_FLAG
+            description: Indicator if the claim has been flagged for potential fraud
+                investigation.
+        -   name: TOTAL_RESERVE
+            description: Current financial reserve set aside for future payments on
+                this claim.
+        -   name: LOSS_DESCRIPTION
+            description: Narrative description of the loss incident.
+        -   name: LOSS_CITY
+            description: City where the loss occurred.
+        -   name: UPDATED_DATE
+            description: Timestamp when the claim record was last modified.
+        -   name: LITIGATION_FLAG
+            description: Indicator if the claim involves legal litigation.
+        -   name: REPORTED_DATE
+            description: The date when the claim was reported to the insurance company.
+        -   name: CAUSE_DESCRIPTION
+            description: Descriptive text corresponding to the Cause Code.
+        -   name: TOTAL_INCURRED
+            description: Total financial impact of the claim (typically Total Paid
+                + Total Reserve).
+        -   name: LOB_CODE
+            description: Line of Business code associated with the claim context.
+        -   name: LOSS_ZIP
+            description: Postal code where the loss occurred.
+        -   name: ADJUSTER_ID
+            description: Identifier for the claims adjuster assigned to manage this
+                case.
+        -   name: STATUS
+            description: Current operational status of the claim (e.g., Open, Closed,
+                Reopened).
+        -   name: DEDUCTIBLE_APPLIED
+            description: The deductible amount applied to this claim settlement.
+        -   name: CREATED_DATE
+            description: Timestamp when the claim record was created in the system.
+        -   name: LOSS_DATE
+            description: The date when the loss incident occurred.
+        -   name: SUBROGATION_FLAG
+            description: Indicator if subrogation (recovery from a third party) is
+                being pursued.
+        -   name: CLOSED_DATE
+            description: The date when the claim was finalized and closed. Null if
+                the claim is still open.
+        -   name: CATASTROPHE_CODE
+            description: Identifier linking the claim to a specific catastrophic event
+                (e.g., Hurricane name), if applicable.
+        -   name: POLICY_ID
+            description: Foreign key referencing the associated POLICY record.
+        -   name: CLAIM_ID
+            description: Unique surrogate identifier for the claim record.
+        -   name: LOSS_STATE
+            description: State code where the loss occurred.
+    -   name: CLAIM_PAYMENT
+        description: Records individual financial transactions and payouts associated
+            with insurance claims, detailing amounts, payees, and methods.
+        columns:
+        -   name: CLAIM_ID
+            description: Foreign key referencing the associated claim record.
+        -   name: PAYMENT_METHOD
+            description: The mechanism used to transfer funds (e.g., Check, EFT).
+        -   name: CHECK_NUMBER
+            description: The specific reference number associated with the payment
+                instrument, typically for checks.
+        -   name: CREATED_DATE
+            description: The date this payment record was created in the system.
+        -   name: PAYMENT_TYPE
+            description: Categorization of the payment purpose (e.g., Indemnity, Medical,
+                Expense).
+        -   name: PAYEE_NAME
+            description: The name of the individual or entity receiving the payment.
+        -   name: PAYEE_TYPE
+            description: Classification of the recipient (e.g., Claimant, Vendor,
+                Attorney).
+        -   name: PAYMENT_ID
+            description: Unique identifier for the payment transaction.
+        -   name: PAYMENT_AMOUNT
+            description: The monetary value of the payment disbursed.
+        -   name: PAYMENT_DATE
+            description: The date on which the payment was issued or processed.
+    -   name: PARTY
+        description: Centralized master data entity storing details for all individuals
+            and organizations involved in the insurance lifecycle, including policyholders,
+            agents, and agencies.
+        columns:
+        -   name: CUSTOMER_SINCE
+            description: Date indicating when the relationship with the party was
+                established.
+        -   name: FIRST_NAME
+            description: First name of the party. Null for organization records.
+        -   name: PRIMARY_STATE
+            description: Primary geographic state associated with the party.
+        -   name: CREATED_DATE
+            description: Timestamp when the record was created in the system.
+        -   name: GENDER
+            description: Gender demographic data. Applicable to individuals.
+        -   name: PARTY_ID
+            description: Unique identifier for the party entity. Primary Key.
+        -   name: PARTY_TYPE
+            description: Discriminator column indicating if the party is an individual
+                or an organization.
+        -   name: DATE_OF_BIRTH
+            description: Birth date of the individual. Used for underwriting and demographics.
+        -   name: PARTY_NAME
+            description: Full legal name or display name of the party. Populated for
+                both individuals and organizations.
+        -   name: SSN_ENCRYPTED
+            description: Encrypted Social Security Number. Populated only for individual
+                party types.
+        -   name: EMAIL
+            description: Primary email contact address.
+        -   name: EIN_ENCRYPTED
+            description: Encrypted Employer Identification Number. Populated only
+                for organization party types.
+        -   name: LAST_NAME
+            description: Last name of the party. Null for organization records.
+        -   name: CREDIT_SCORE
+            description: Financial credit score used for risk assessment. Applicable
+                to individuals.
+        -   name: PHONE
+            description: Primary contact telephone number.
+        -   name: IS_ACTIVE
+            description: Boolean flag indicating if the party record is currently
+                active in the system.
+        -   name: UPDATED_DATE
+            description: Timestamp when the record was last modified.
+    -   name: POLICY
+        description: Core entity representing an insurance contract between the insurer
+            and the policyholder. Stores high-level details about the coverage agreement,
+            including status, effective dates, premium amounts, and assigned agent.
+        columns:
+        -   name: BUNDLE_DISCOUNT_PCT
+            description: Percentage discount applied to the premium for bundling multiple
+                policies.
+        -   name: CREATED_DATE
+            description: Timestamp indicating when the policy record was first created
+                in the system.
+        -   name: WRITTEN_PREMIUM
+            description: The actual premium amount recorded for the policy term.
+        -   name: UPDATED_DATE
+            description: Timestamp indicating when the policy record was last modified.
+        -   name: LOB_CODE
+            description: Line of Business code indicating the type of insurance product
+                (e.g., Auto, Home).
+        -   name: PARTY_ID
+            description: Foreign key referencing the `PARTY` table to identify the
+                primary policyholder.
+        -   name: UNDERWRITER
+            description: Name or identifier of the underwriter responsible for approving
+                the policy risk.
+        -   name: BILLING_TYPE
+            description: Method of billing associated with the policy (e.g., Direct
+                Bill, Agency Bill).
+        -   name: CANCELLATION_REASON
+            description: Description or code explaining why the policy was cancelled
+                (e.g., Non-Payment).
+        -   name: EXPIRATION_DATE
+            description: The date on which the insurance coverage is scheduled to
+                end.
+        -   name: AGENT_ID
+            description: Foreign key referencing the agent responsible for selling
+                or servicing the policy.
+        -   name: PAYMENT_PLAN
+            description: Code or description of the selected payment schedule (e.g.,
+                Monthly, Annual).
+        -   name: STATE_CODE
+            description: Two-character abbreviation of the US state where the policy
+                is issued or the risk is located.
+        -   name: RISK_SCORE
+            description: Calculated numeric score representing the underwriting risk
+                associated with the policy (1-100 scale).
+        -   name: EFFECTIVE_DATE
+            description: The date on which the insurance coverage begins.
+        -   name: POLICY_ID
+            description: Internal system surrogate key uniquely identifying the policy
+                record.
+        -   name: CANCELLATION_DATE
+            description: The date on which the policy was cancelled, if applicable.
+                Null for active policies.
+        -   name: POLICY_NUMBER
+            description: Unique alphanumeric identifier assigned to the policy contract.
+        -   name: POLICY_VERSION
+            description: Version number of the policy, incremented for endorsements
+                or renewals.
+        -   name: STATUS
+            description: Current operational state of the policy (e.g., Active, Cancelled,
+                Expired).
+        -   name: IS_BUNDLE
+            description: Flag indicating if this policy is part of a multi-policy
+                bundle.
+        -   name: TERRITORY_CODE
+            description: Geographic code used for rating and risk assessment purposes
+                within a state.
+        -   name: ANNUAL_PREMIUM
+            description: The total cost of the policy for a full year of coverage.
+    -   name: POLICY_COVERAGE
+        description: Details the specific insurance coverages attached to a policy,
+            defining the scope of protection, limits, and associated costs.
+        columns:
+        -   name: IS_MANDATORY
+            description: Boolean flag indicating if this specific coverage is legally
+                or contractually required.
+        -   name: DEDUCTIBLE_AMOUNT
+            description: The amount the policyholder is responsible for paying before
+                the insurance coverage applies.
+        -   name: POLICY_ID
+            description: Foreign key identifier linking this coverage to the parent
+                Policy entity.
+        -   name: EFFECTIVE_DATE
+            description: The date on which this specific coverage becomes active.
+        -   name: EXPIRATION_DATE
+            description: The date on which this specific coverage ceases to be active.
+        -   name: COVERAGE_CODE
+            description: Standardized code identifying the type of protection provided.
+                Likely a Foreign Key to `REF_COVERAGE_CODE`.
+        -   name: PREMIUM_AMOUNT
+            description: The specific monetary cost calculated for this individual
+                coverage line item.
+        -   name: CREATED_DATE
+            description: Timestamp indicating when this record was created in the
+                system.
+        -   name: LIMIT_TYPE
+            description: Categorization of the coverage limit (e.g., Per Occurrence,
+                Aggregate).
+        -   name: COVERAGE_ID
+            description: Unique identifier for the coverage record (Primary Key).
+        -   name: LIMIT_AMOUNT
+            description: The maximum financial liability the insurer accepts for this
+                specific coverage.
+    -   name: POLICY_PREMIUM
+        description: Records detailed financial transactions associated with insurance
+            policies, capturing premium amounts, taxes, fees, and commissions at a
+            transactional level.
+        columns:
+        -   name: POLICY_ID
+            description: Foreign key referencing the parent POLICY table, linking
+                this financial record to a specific policy.
+        -   name: FEE_AMOUNT
+            description: Administrative or processing fees associated with the transaction,
+                separate from the premium.
+        -   name: TRANSACTION_TYPE
+            description: Categorization of the financial event (e.g., New Business,
+                Endorsement, Cancellation, Renewal).
+        -   name: EARNED_PREMIUM
+            description: The portion of the premium that applies to the expired part
+                of the policy period; revenue recognized to date.
+        -   name: COMMISSION_AMOUNT
+            description: The monetary amount payable to the agent or agency as commission
+                for this transaction.
+        -   name: TAX_AMOUNT
+            description: Total tax charges applied to this specific premium transaction.
+        -   name: CREATED_DATE
+            description: The timestamp when this record was originally created in
+                the system.
+        -   name: PREMIUM_ID
+            description: Identifier for the specific premium transaction record.
+        -   name: ACCOUNTING_DATE
+            description: The date the transaction was recognized in the general ledger
+                for accounting purposes.
+        -   name: WRITTEN_PREMIUM
+            description: The total premium amount charged for the policy coverage
+                period, regardless of the portion earned.
+        -   name: TRANSACTION_DATE
+            description: The actual date the financial transaction or policy change
+                occurred.
+    -   name: REF_CAUSE_OF_LOSS
+        description: A reference lookup table defining standardized causes of loss
+            (e.g., fire, theft, collision) used to classify insurance claims. It includes
+            descriptive metadata and statistical weights for risk analysis.
+        columns:
+        -   name: AVG_SEVERITY
+            description: Statistical metric representing the average financial impact
+                or severity associated with this specific cause of loss.
+        -   name: CAUSE_CATEGORY
+            description: Higher-level classification grouping for the cause of loss
+                (e.g., Natural Disaster, Liability).
+        -   name: CAUSE_CODE
+            description: Standardized business code representing the specific cause
+                of loss.
+        -   name: FREQUENCY_WEIGHT
+            description: Statistical weight representing the relative frequency or
+                likelihood of this cause of loss occurring.
+        -   name: CAUSE_ID
+            description: Unique numeric identifier for the cause of loss record. Likely
+                functions as the primary key.
+        -   name: CAUSE_NAME
+            description: Descriptive name of the cause of loss.
+        -   name: CREATED_DATE
+            description: The date when this reference record was created in the system.
+    -   name: REF_COVERAGE_CODE
+        description: A reference table defining standardized insurance coverage types,
+            their descriptions, default financial terms, and associated lines of business.
+        columns:
+        -   name: LOB_CODE
+            description: Code identifying the Line of Business (e.g., Auto, Home)
+                to which this coverage applies.
+        -   name: DEFAULT_LIMIT
+            description: The default monetary limit for coverage payout.
+        -   name: COVERAGE_NAME
+            description: Full descriptive name of the insurance coverage (e.g., Collision,
+                Liability).
+        -   name: COVERAGE_ID
+            description: Unique numeric identifier for the coverage type.
+        -   name: CREATED_DATE
+            description: The date when the coverage record was established in the
+                system.
+        -   name: IS_REQUIRED
+            description: Boolean flag indicating whether this coverage is mandatory
+                for the associated line of business.
+        -   name: DEFAULT_DEDUCTIBLE
+            description: The standard deductible amount associated with this coverage
+                type by default.
+        -   name: COVERAGE_CODE
+            description: Standardized short code representing the coverage type, used
+                for business processing and lookup.
+    -   name: REF_LINE_OF_BUSINESS
+        description: Reference table defining standard Insurance Lines of Business
+            (LOB), including associated business segments and benchmark metrics.
+        columns:
+        -   name: ACTIVE_FLAG
+            description: Boolean indicator denoting whether the line of business is
+                currently active for use.
+        -   name: LOB_NAME
+            description: Full descriptive name of the insurance product line.
+        -   name: CREATED_DATE
+            description: Date when the line of business record was created in the
+                system.
+        -   name: LOB_CODE
+            description: Standardized alphanumeric code representing the line of business.
+        -   name: AVG_PREMIUM
+            description: Benchmark or average premium amount associated with this
+                line of business.
+        -   name: CLAIM_FREQUENCY
+            description: Statistical reference value representing the expected frequency
+                of claims for this line of business.
+        -   name: SEGMENT
+            description: Market or operational segment category (e.g., Commercial,
+                Personal) to which the line belongs.
+        -   name: LOB_ID
+            description: Unique identifier for the line of business record.
+        -   name: POLICY_WEIGHT
+            description: Numerical weighting factor assigned to the line of business,
+                likely used for portfolio balancing or risk scoring.
+    -   name: REF_STATE
+        description: Reference table storing United States geographical information
+            and specific insurance regulatory statuses for Auto and Workers' Compensation
+            lines of business.
+        columns:
+        -   name: REGION
+            description: Geographic grouping classification for the state (e.g., Northeast,
+                Midwest).
+        -   name: WC_MONOPOLISTIC
+            description: Boolean flag indicating if the state operates a monopolistic
+                Workers' Compensation fund (where private insurance is restricted).
+        -   name: STATE_ID
+            description: Unique numeric identifier for the state, serving as the primary
+                key.
+        -   name: NO_FAULT_AUTO
+            description: Boolean flag indicating if the state enforces 'No-Fault'
+                auto insurance laws.
+        -   name: CREATED_DATE
+            description: The date when the state record was created in the system.
+        -   name: STATE_CODE
+            description: Standard two-character abbreviation for the state (e.g.,
+                NY, CA).
+        -   name: STATE_NAME
+            description: Full name of the US state or district.
+        -   name: TERRITORY_CODE
+            description: Code identifying specific insurance rating territories associated
+                with the state.

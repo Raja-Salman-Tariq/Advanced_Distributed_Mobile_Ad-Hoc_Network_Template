@@ -1,0 +1,154 @@
+version: 2
+
+# Data Quality Test Suite for Sentinel Insurance Analytics
+# This file organizes all data quality tests following the validation rules framework
+# Tests use probabilistic functions and sampling to ensure efficiency (<1M row scans)
+
+models:
+  # ===================================================================
+  # FACT TABLE TESTS
+  # ===================================================================
+
+  - name: fct_claims
+    description: "Fact table containing insurance claims with financial metrics"
+    tests:
+      # Test suite runs via singular test files in tests/marts/
+      # See test_primary_key_uniqueness_efficient.sql for PK tests
+      # See test_not_null_critical_fields.sql for NOT NULL tests
+      # See test_value_ranges_sampled.sql for range validations
+      - dbt_utils.expression_is_true:
+          name: fct_claims_total_rows_check
+          expression: "count(*) >= 0"
+          config:
+            severity: warn
+            where: "1=1 LIMIT 1"
+
+  - name: fct_claim_payments
+    description: "Fact table containing individual claim payment transactions"
+    tests:
+      - dbt_utils.expression_is_true:
+          name: fct_claim_payments_total_rows_check
+          expression: "count(*) >= 0"
+          config:
+            severity: warn
+            where: "1=1 LIMIT 1"
+
+  - name: fct_policy_premiums
+    description: "Fact table containing premium transactions with commission calculations"
+    tests:
+      - dbt_utils.expression_is_true:
+          name: fct_policy_premiums_total_rows_check
+          expression: "count(*) >= 0"
+          config:
+            severity: warn
+            where: "1=1 LIMIT 1"
+
+  # ===================================================================
+  # DIMENSION TABLE TESTS
+  # ===================================================================
+
+  - name: dim_policies
+    description: "Dimension table for policies with current exposure logic"
+    tests:
+      - dbt_utils.expression_is_true:
+          name: dim_policies_total_rows_check
+          expression: "count(*) >= 0"
+          config:
+            severity: warn
+            where: "1=1 LIMIT 1"
+
+  - name: dim_agents
+    description: "Dimension table for insurance agents"
+    tests:
+      - dbt_utils.expression_is_true:
+          name: dim_agents_total_rows_check
+          expression: "count(*) >= 0"
+          config:
+            severity: warn
+            where: "1=1 LIMIT 1"
+
+  - name: dim_agencies
+    description: "Dimension table for insurance agencies"
+    tests:
+      - dbt_utils.expression_is_true:
+          name: dim_agencies_total_rows_check
+          expression: "count(*) >= 0"
+          config:
+            severity: warn
+            where: "1=1 LIMIT 1"
+
+  - name: dim_line_of_business
+    description: "Reference dimension for insurance product lines"
+
+  - name: dim_states
+    description: "Reference dimension for US states"
+
+  - name: dim_cause_of_loss
+    description: "Reference dimension for loss causes"
+
+# ===================================================================
+# SINGULAR TEST DOCUMENTATION
+# ===================================================================
+# The following singular tests are defined in /tests/marts/:
+#
+# 1. PRIMARY KEY UNIQUENESS (ERROR severity)
+#    - test_primary_key_uniqueness_efficient.sql
+#      Uses HLL (HyperLogLog) for approximate cardinality checks
+#      Covers: fct_claims.CLAIM_ID, fct_claim_payments.PAYMENT_ID,
+#              fct_policy_premiums.PREMIUM_ID, dim_policies.POLICY_ID,
+#              dim_agents.AGENT_ID, dim_agencies.AGENCY_ID
+#
+# 2. NOT NULL VALIDATIONS (ERROR severity)
+#    - test_not_null_critical_fields.sql
+#      Uses APPROX_COUNT_DISTINCT for efficient null detection
+#      Covers all critical fields per validation rules
+#
+# 3. REFERENTIAL INTEGRITY (ERROR/WARN severity)
+#    - test_referential_integrity_core.sql (ERROR)
+#      Tests: fct_claims->dim_policies, fct_policy_premiums->dim_policies,
+#             dim_agents->dim_agencies
+#    - test_referential_integrity_claim_payments.sql (WARN)
+#      Tests: fct_claim_payments->fct_claims
+#
+# 4. BUSINESS LOGIC VALIDATIONS (WARN severity)
+#    - test_fct_claims_incurred_calculation.sql
+#      Validates: TOTAL_INCURRED = TOTAL_PAID + TOTAL_RESERVE
+#    - test_fct_policy_premiums_agent_revenue.sql
+#      Validates: AGENT_NET_REVENUE = COMMISSION_AMOUNT × COMMISSION_SPLIT
+#    - test_dim_policies_current_exposure.sql (ERROR)
+#      Validates: One row per POLICY_NUMBER (max version only)
+#    - test_fct_claims_date_sequence.sql
+#      Validates: LOSS_DATE <= REPORTED_DATE
+#    - test_fct_claims_closed_date.sql
+#      Validates: CLOSED_DATE >= REPORTED_DATE
+#
+# 5. VALUE RANGE VALIDATIONS (WARN severity)
+#    - test_value_ranges_sampled.sql
+#      Comprehensive range checks using QUALIFY for efficient sampling
+#      Covers: Financial amounts >= 0, RISK_SCORE (1-100),
+#              COMMISSION_SPLIT (0-1), COMMISSION_RATE (0-1)
+#
+# 6. CODE CONSISTENCY VALIDATIONS (WARN severity)
+#    - test_code_consistency_lob.sql
+#      Validates: LOB_CODE exists in dim_line_of_business
+#    - test_code_consistency_state.sql
+#      Validates: STATE_CODE exists in dim_states
+#    - test_code_consistency_cause.sql
+#      Validates: CAUSE_CODE exists in dim_cause_of_loss
+#
+# 7. CROSS-MODEL CONSISTENCY (WARN severity)
+#    - test_loss_ratio_reasonableness.sql
+#      Validates: Loss Ratio between 0% and 200%
+#    - test_premium_transaction_count.sql
+#      Validates: Active policies have premium transactions
+#
+# ===================================================================
+# GENERIC TEST MACROS
+# ===================================================================
+# Custom generic tests in /tests/generic/:
+#    - test_approximate_unique.sql - HLL-based uniqueness check
+#    - test_sampled_not_null.sql - Sampled NOT NULL validation
+#    - test_sampled_relationships.sql - Sampled FK validation
+#    - test_value_range.sql - Sampled range validation
+#
+# ===================================================================

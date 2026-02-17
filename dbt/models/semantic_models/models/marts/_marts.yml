@@ -1,0 +1,224 @@
+version: 2
+
+models:
+  # FACT TABLES
+  - name: fct_claims
+    description: "Fact table containing one row per insurance claim with financial metrics for loss ratio analysis. Supports calculation of Total Incurred Losses KPI and Loss Ratio metrics."
+    columns:
+      - name: CLAIM_ID
+        description: "Unique identifier for the claim record (Primary Key)"
+      - name: CLAIM_NUMBER
+        description: "Business-facing claim identifier used in correspondence"
+      - name: POLICY_ID
+        description: "Foreign key to dim_policies"
+      - name: LOSS_DATE
+        description: "Date when the loss incident occurred (standardized from text)"
+      - name: REPORTED_DATE
+        description: "Date when the claim was reported to the insurer"
+      - name: CLOSED_DATE
+        description: "Date when the claim was finalized; NULL if still open"
+      - name: LOB_CODE
+        description: "Line of Business code; 'Unclassified' if NULL in source"
+      - name: STATUS
+        description: "Current claim status (Open, Closed, Reopened)"
+      - name: CAUSE_CODE
+        description: "Standardized code for cause of loss"
+      - name: TOTAL_INCURRED
+        description: "Total financial impact (Paid + Reserve); numerator for Loss Ratio"
+      - name: TOTAL_PAID
+        description: "Cumulative amount paid out to date"
+      - name: TOTAL_RESERVE
+        description: "Financial reserve for future payments"
+      - name: FRAUD_FLAG
+        description: "Indicator if claim is flagged for fraud investigation"
+      - name: LITIGATION_FLAG
+        description: "Indicator if claim involves legal litigation"
+
+  - name: fct_claim_payments
+    description: "Fact table containing individual payment transactions for claims. Supports detailed payment analysis and cash flow tracking."
+    columns:
+      - name: PAYMENT_ID
+        description: "Unique identifier for the payment transaction (Primary Key)"
+      - name: CLAIM_ID
+        description: "Foreign key to fct_claims"
+      - name: PAYMENT_DATE
+        description: "Date when payment was issued or processed"
+      - name: PAYMENT_AMOUNT
+        description: "Monetary value of the payment disbursed"
+      - name: PAYMENT_TYPE
+        description: "Categorization of payment purpose (Indemnity, Medical, Expense)"
+      - name: PAYMENT_METHOD
+        description: "Mechanism used to transfer funds (Check, EFT)"
+      - name: PAYEE_NAME
+        description: "Name of individual or entity receiving payment"
+      - name: PAYEE_TYPE
+        description: "Classification of recipient (Claimant, Vendor, Attorney)"
+
+  - name: fct_policy_premiums
+    description: "Fact table containing premium transactions with commission calculations for agent revenue analysis. Includes calculated AGENT_NET_REVENUE field supporting Agent Net Revenue KPI. Earned Premium supports Loss Ratio denominator calculation."
+    columns:
+      - name: PREMIUM_ID
+        description: "Unique identifier for the premium transaction (Primary Key)"
+      - name: POLICY_ID
+        description: "Foreign key to dim_policies"
+      - name: TRANSACTION_DATE
+        description: "Date when the financial transaction occurred"
+      - name: ACCOUNTING_DATE
+        description: "Date recognized in general ledger for accounting"
+      - name: TRANSACTION_TYPE
+        description: "Type of financial event (New Business, Endorsement, Cancellation, Renewal)"
+      - name: WRITTEN_PREMIUM
+        description: "Total premium charged for the coverage period"
+      - name: EARNED_PREMIUM
+        description: "Premium applicable to expired policy period; denominator for Loss Ratio"
+      - name: COMMISSION_AMOUNT
+        description: "Total commission payable to agent/agency"
+      - name: AGENT_NET_REVENUE
+        description: "Calculated field - commission_amount × agent commission_split"
+      - name: TAX_AMOUNT
+        description: "Tax charges applied to the premium transaction"
+      - name: FEE_AMOUNT
+        description: "Administrative or processing fees separate from premium"
+
+  # DIMENSION TABLES
+  - name: dim_policies
+    description: "Dimension table for insurance policies with current exposure logic (latest version per policy number). Supports Current Exposure KPIs for policy count and total premium at risk."
+    columns:
+      - name: POLICY_ID
+        description: "Unique surrogate key for the policy record (Primary Key)"
+      - name: POLICY_NUMBER
+        description: "Business identifier for the policy contract"
+      - name: POLICY_VERSION
+        description: "Version number; only max version per policy_number included"
+      - name: EFFECTIVE_DATE
+        description: "Date when insurance coverage begins"
+      - name: EXPIRATION_DATE
+        description: "Date when insurance coverage ends"
+      - name: STATUS
+        description: "Current policy status (Active, Cancelled, Expired)"
+      - name: LOB_CODE
+        description: "Line of Business code; 'Unclassified' if NULL in source"
+      - name: STATE_CODE
+        description: "State where policy is issued; 'Unclassified' if NULL in source"
+      - name: ANNUAL_PREMIUM
+        description: "Total cost for full year of coverage"
+      - name: AGENT_ID
+        description: "Foreign key to dim_agents"
+      - name: PARTY_ID
+        description: "Foreign key to policyholder in Party table"
+      - name: POLICYHOLDER_NAME
+        description: "Name of the insured party (from PARTY table)"
+      - name: IS_BUNDLE
+        description: "Flag indicating multi-policy bundle"
+      - name: RISK_SCORE
+        description: "Underwriting risk score (1-100 scale)"
+
+  - name: dim_agents
+    description: "Dimension table for insurance agents with commission split rates. Commission split used in Agent Net Revenue calculations."
+    columns:
+      - name: AGENT_ID
+        description: "Unique identifier for the agent (Primary Key)"
+      - name: AGENT_CODE
+        description: "Business-facing agent identifier"
+      - name: FIRST_NAME
+        description: "Agent's first name"
+      - name: LAST_NAME
+        description: "Agent's last name"
+      - name: FULL_NAME
+        description: "Concatenated first and last name"
+      - name: AGENCY_ID
+        description: "Foreign key to dim_agencies"
+      - name: COMMISSION_SPLIT
+        description: "Agent's portion of commission (non-additive rate, e.g., 0.6000 for 60%)"
+      - name: IS_ACTIVE
+        description: "Flag indicating if agent is currently authorized"
+      - name: HIRE_DATE
+        description: "Date agent was employed or contracted"
+      - name: LICENSE_NUMBER
+        description: "Regulatory license identifier"
+      - name: LICENSE_STATE
+        description: "State jurisdiction for license"
+
+  - name: dim_agencies
+    description: "Dimension table for insurance agencies with commission rates."
+    columns:
+      - name: AGENCY_ID
+        description: "Unique identifier for the agency (Primary Key)"
+      - name: AGENCY_CODE
+        description: "Business-facing agency identifier"
+      - name: AGENCY_NAME
+        description: "Legal business name of the agency"
+      - name: AGENCY_TYPE
+        description: "Categorization (Independent, Captive, Broker)"
+      - name: COMMISSION_RATE
+        description: "Percentage rate for commission calculation (non-additive rate)"
+      - name: IS_ACTIVE
+        description: "Flag indicating if agency is currently authorized"
+      - name: STATE_CODE
+        description: "State where agency is located"
+      - name: CITY
+        description: "City where agency is located"
+
+  - name: dim_line_of_business
+    description: "Dimension table for insurance product lines with benchmark metrics. Used for LOB-level analysis including Loss Ratio by Line of Business."
+    columns:
+      - name: LOB_ID
+        description: "Unique identifier for line of business (Primary Key)"
+      - name: LOB_CODE
+        description: "Standardized LOB code (Auto, Home, etc.)"
+      - name: LOB_NAME
+        description: "Full descriptive name of the insurance product line"
+      - name: SEGMENT
+        description: "Market segment (Commercial, Personal)"
+      - name: AVG_PREMIUM
+        description: "Benchmark average premium for this LOB"
+      - name: CLAIM_FREQUENCY
+        description: "Expected claim frequency metric"
+      - name: IS_ACTIVE
+        description: "Flag indicating if LOB is currently offered"
+
+  - name: dim_states
+    description: "Dimension table for US states with insurance regulatory information."
+    columns:
+      - name: STATE_ID
+        description: "Unique identifier for the state (Primary Key)"
+      - name: STATE_CODE
+        description: "Two-character state abbreviation"
+      - name: STATE_NAME
+        description: "Full state name"
+      - name: REGION
+        description: "Geographic region grouping (Northeast, Midwest, etc.)"
+      - name: NO_FAULT_AUTO
+        description: "Flag for No-Fault auto insurance laws"
+
+  - name: dim_cause_of_loss
+    description: "Dimension table for standardized loss causes with severity metrics."
+    columns:
+      - name: CAUSE_ID
+        description: "Unique identifier for cause of loss (Primary Key)"
+      - name: CAUSE_CODE
+        description: "Standardized business code for loss cause"
+      - name: CAUSE_NAME
+        description: "Descriptive name of the cause"
+      - name: CAUSE_CATEGORY
+        description: "Higher-level grouping (Natural Disaster, Liability, etc.)"
+      - name: AVG_SEVERITY
+        description: "Average financial impact for this cause type"
+
+  - name: dim_coverage_codes
+    description: "Dimension table for insurance coverage types with default terms."
+    columns:
+      - name: COVERAGE_ID
+        description: "Unique identifier for coverage type (Primary Key)"
+      - name: COVERAGE_CODE
+        description: "Standardized coverage code"
+      - name: COVERAGE_NAME
+        description: "Full descriptive name (Collision, Liability, etc.)"
+      - name: LOB_CODE
+        description: "Associated line of business"
+      - name: DEFAULT_LIMIT
+        description: "Default monetary limit for coverage payout"
+      - name: DEFAULT_DEDUCTIBLE
+        description: "Default deductible amount"
+      - name: IS_REQUIRED
+        description: "Flag indicating mandatory coverage for LOB"

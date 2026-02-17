@@ -1,0 +1,232 @@
+version: 2
+
+models:
+  - name: stg_claims
+    description: "Staging model for insurance claims with standardized date parsing and NULL handling for classification codes."
+    columns:
+      - name: CLAIM_ID
+        description: "Unique identifier for the claim record (Primary Key)"
+      - name: CLAIM_NUMBER
+        description: "Business-facing claim identifier used in correspondence"
+      - name: POLICY_ID
+        description: "Foreign key to policies"
+      - name: LOSS_DATE
+        description: "Date when the loss incident occurred (standardized from text)"
+      - name: REPORTED_DATE
+        description: "Date when the claim was reported to the insurer"
+      - name: CLOSED_DATE
+        description: "Date when the claim was finalized; NULL if still open"
+      - name: LOB_CODE
+        description: "Line of Business code; defaults to 'Unclassified' if NULL in source"
+      - name: STATUS
+        description: "Current claim status (Open, Closed, Reopened)"
+      - name: CAUSE_CODE
+        description: "Standardized code for cause of loss"
+      - name: TOTAL_INCURRED
+        description: "Total financial impact (Paid + Reserve)"
+      - name: TOTAL_PAID
+        description: "Cumulative amount paid out to date"
+      - name: TOTAL_RESERVE
+        description: "Financial reserve for future payments"
+      - name: FRAUD_FLAG
+        description: "Indicator if claim is flagged for fraud investigation"
+      - name: LITIGATION_FLAG
+        description: "Indicator if claim involves legal litigation"
+
+  - name: stg_claim_payments
+    description: "Staging model for individual claim payment transactions."
+    columns:
+      - name: PAYMENT_ID
+        description: "Unique identifier for the payment transaction (Primary Key)"
+      - name: CLAIM_ID
+        description: "Foreign key to claims"
+      - name: PAYMENT_DATE
+        description: "Date when payment was issued or processed"
+      - name: PAYMENT_AMOUNT
+        description: "Monetary value of the payment disbursed"
+      - name: PAYMENT_TYPE
+        description: "Categorization of payment purpose (Indemnity, Medical, Expense)"
+      - name: PAYMENT_METHOD
+        description: "Mechanism used to transfer funds (Check, EFT)"
+      - name: PAYEE_NAME
+        description: "Name of individual or entity receiving payment"
+      - name: PAYEE_TYPE
+        description: "Classification of recipient (Claimant, Vendor, Attorney)"
+
+  - name: stg_policies
+    description: "Staging model for insurance policies with standardized LOB_CODE and STATE_CODE defaults."
+    columns:
+      - name: POLICY_ID
+        description: "Unique surrogate key for the policy record (Primary Key)"
+      - name: POLICY_NUMBER
+        description: "Business identifier for the policy contract"
+      - name: POLICY_VERSION
+        description: "Version number; incremented for endorsements or renewals"
+      - name: EFFECTIVE_DATE
+        description: "Date when insurance coverage begins"
+      - name: EXPIRATION_DATE
+        description: "Date when insurance coverage ends"
+      - name: STATUS
+        description: "Current policy status (Active, Cancelled, Expired)"
+      - name: LOB_CODE
+        description: "Line of Business code; defaults to 'Unclassified' if NULL in source"
+      - name: STATE_CODE
+        description: "State where policy is issued; defaults to 'Unclassified' if NULL in source"
+      - name: ANNUAL_PREMIUM
+        description: "Total cost for full year of coverage"
+      - name: AGENT_ID
+        description: "Foreign key to agents"
+      - name: PARTY_ID
+        description: "Foreign key to policyholder in Party table"
+
+  - name: stg_policy_premiums
+    description: "Staging model for premium transactions."
+    columns:
+      - name: PREMIUM_ID
+        description: "Identifier for the specific premium transaction record (Primary Key)"
+      - name: POLICY_ID
+        description: "Foreign key to policies"
+      - name: TRANSACTION_DATE
+        description: "Date when the financial transaction occurred"
+      - name: ACCOUNTING_DATE
+        description: "Date recognized in general ledger for accounting"
+      - name: TRANSACTION_TYPE
+        description: "Type of financial event (New Business, Endorsement, Cancellation, Renewal)"
+      - name: WRITTEN_PREMIUM
+        description: "Total premium charged for the coverage period"
+      - name: EARNED_PREMIUM
+        description: "Premium applicable to expired policy period"
+      - name: COMMISSION_AMOUNT
+        description: "Total commission payable to agent/agency"
+
+  - name: stg_policy_coverages
+    description: "Staging model for policy coverage details."
+    columns:
+      - name: COVERAGE_ID
+        description: "Unique identifier for the coverage record (Primary Key)"
+      - name: POLICY_ID
+        description: "Foreign key to policies"
+      - name: COVERAGE_CODE
+        description: "Standardized code identifying the type of protection provided"
+      - name: LIMIT_AMOUNT
+        description: "Maximum financial liability for this coverage"
+      - name: DEDUCTIBLE_AMOUNT
+        description: "Amount policyholder pays before coverage applies"
+
+  - name: stg_agents
+    description: "Staging model for insurance agents with full name concatenation."
+    columns:
+      - name: AGENT_ID
+        description: "Unique identifier for the agent (Primary Key)"
+      - name: AGENT_CODE
+        description: "Business-facing agent identifier"
+      - name: FIRST_NAME
+        description: "Agent's first name"
+      - name: LAST_NAME
+        description: "Agent's last name"
+      - name: FULL_NAME
+        description: "Concatenated first and last name"
+      - name: AGENCY_ID
+        description: "Foreign key to agencies"
+      - name: COMMISSION_SPLIT
+        description: "Agent's portion of commission (e.g., 0.6000 for 60%)"
+      - name: IS_ACTIVE
+        description: "Flag indicating if agent is currently authorized"
+
+  - name: stg_agencies
+    description: "Staging model for insurance agencies."
+    columns:
+      - name: AGENCY_ID
+        description: "Unique identifier for the agency (Primary Key)"
+      - name: AGENCY_CODE
+        description: "Business-facing agency identifier"
+      - name: AGENCY_NAME
+        description: "Legal business name of the agency"
+      - name: AGENCY_TYPE
+        description: "Categorization (Independent, Captive, Broker)"
+      - name: COMMISSION_RATE
+        description: "Percentage rate for commission calculation"
+      - name: IS_ACTIVE
+        description: "Flag indicating if agency is currently authorized"
+      - name: STATE_CODE
+        description: "State where agency is located"
+      - name: CITY
+        description: "City where agency is located"
+
+  - name: stg_parties
+    description: "Staging model for party/policyholder master data."
+    columns:
+      - name: PARTY_ID
+        description: "Unique identifier for the party entity (Primary Key)"
+      - name: PARTY_TYPE
+        description: "Discriminator (Individual or Organization)"
+      - name: PARTY_NAME
+        description: "Full legal name or display name"
+      - name: FIRST_NAME
+        description: "First name (NULL for organizations)"
+      - name: LAST_NAME
+        description: "Last name (NULL for organizations)"
+
+  - name: stg_ref_line_of_business
+    description: "Staging model for Line of Business reference data."
+    columns:
+      - name: LOB_ID
+        description: "Unique identifier for line of business (Primary Key)"
+      - name: LOB_CODE
+        description: "Standardized LOB code (Auto, Home, etc.)"
+      - name: LOB_NAME
+        description: "Full descriptive name of the insurance product line"
+      - name: SEGMENT
+        description: "Market segment (Commercial, Personal)"
+      - name: AVG_PREMIUM
+        description: "Benchmark average premium for this LOB"
+      - name: CLAIM_FREQUENCY
+        description: "Expected claim frequency metric"
+      - name: IS_ACTIVE
+        description: "Flag indicating if LOB is currently offered"
+
+  - name: stg_ref_states
+    description: "Staging model for US state reference data."
+    columns:
+      - name: STATE_ID
+        description: "Unique identifier for the state (Primary Key)"
+      - name: STATE_CODE
+        description: "Two-character state abbreviation"
+      - name: STATE_NAME
+        description: "Full state name"
+      - name: REGION
+        description: "Geographic region grouping (Northeast, Midwest, etc.)"
+      - name: NO_FAULT_AUTO
+        description: "Flag for No-Fault auto insurance laws"
+
+  - name: stg_ref_cause_of_loss
+    description: "Staging model for cause of loss reference data."
+    columns:
+      - name: CAUSE_ID
+        description: "Unique identifier for cause of loss (Primary Key)"
+      - name: CAUSE_CODE
+        description: "Standardized business code for loss cause"
+      - name: CAUSE_NAME
+        description: "Descriptive name of the cause"
+      - name: CAUSE_CATEGORY
+        description: "Higher-level grouping (Natural Disaster, Liability, etc.)"
+      - name: AVG_SEVERITY
+        description: "Average financial impact for this cause type"
+
+  - name: stg_ref_coverage_codes
+    description: "Staging model for coverage code reference data."
+    columns:
+      - name: COVERAGE_ID
+        description: "Unique identifier for coverage type (Primary Key)"
+      - name: COVERAGE_CODE
+        description: "Standardized coverage code"
+      - name: COVERAGE_NAME
+        description: "Full descriptive name (Collision, Liability, etc.)"
+      - name: LOB_CODE
+        description: "Associated line of business"
+      - name: DEFAULT_LIMIT
+        description: "Default monetary limit for coverage payout"
+      - name: DEFAULT_DEDUCTIBLE
+        description: "Default deductible amount"
+      - name: IS_REQUIRED
+        description: "Flag indicating mandatory coverage for LOB"

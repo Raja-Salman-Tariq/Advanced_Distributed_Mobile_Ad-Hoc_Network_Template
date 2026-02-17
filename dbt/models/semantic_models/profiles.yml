@@ -1,0 +1,14 @@
+ekai_dbt:
+    outputs:
+        dev:
+            threads: 4
+            client_session_keep_alive: false
+            account: TB99471
+            database: EKAI
+            schema: demoModel_18
+            warehouse: COMPUTE_WH
+            host: tb99471.eu-central-1.snowflakecomputing.com
+            authenticator: oauth
+            token: ''
+            type: snowflake
+    target: dev

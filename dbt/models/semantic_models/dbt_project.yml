@@ -1,0 +1,42 @@
+name: 'sentinel_insurance'
+version: '1.0.0'
+config-version: 2
+
+# This dbt project implements the Sentinel Insurance Analytics semantic layer
+# supporting Loss Ratio analysis, Agent Net Revenue tracking, and Current Exposure reporting
+
+profile: 'ekai_dbt'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Model configurations
+models:
+  sentinel_insurance:
+    # Staging layer - Data cleansing and standardization
+    staging:
+      +materialized: view
+      +schema: staging
+
+    # Marts layer - Business-ready dimensional models
+    marts:
+      +materialized: view
+      +schema: marts
+
+# Global configurations
+vars:
+  # Date format handling
+  default_date_format: 'YYYY-MM-DD'
+
+  # Default values for NULL handling
+  default_lob_code: 'Unclassified'
+  default_state_code: 'Unclassified'
